@@ -10,7 +10,7 @@ public class Question
     public int difficulty;
 
     public static Question Null {
-        get { return new Question("What?",new string[] { "A","B","C","D" }, 0, 1); }
+        get { return new Question("This is sample Question. Answer is 'A'.",new string[] { "A","B","C","D" }, 0, 1); }
     }
 
     public Question(string question,string[] answers,int answerIndex,int difficulty)

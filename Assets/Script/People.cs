@@ -1,22 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
+[Serializable]
 public class People
 {
-    public int Hp;
-    public int MaxHp;
+    public float Hp;
+    public float MaxHp;
 
-    public int Atk;
+    public float Atk;
+
+    public Sprite Normal, Atack;
 
     public People Target; // 攻撃対象
 
-    public AttackAction AttackToTarget(int damage)
+    public People()
+    {
+        this.Hp = this.MaxHp;
+    }
+
+    public AttackAction AttackToTarget(float damage)
     {
         return Target.AttackToMe(damage);
     }
 
-    public AttackAction AttackToMe(int damage)
+    public AttackAction AttackToMe(float damage)
     {
         Hp = Hp - damage;
         if (Hp < 0)
