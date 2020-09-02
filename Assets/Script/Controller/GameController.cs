@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour
 {
     public UIController UIController;
     public SceneController SceneController;
+    public QuestionController QuestionController;
 
     GameSystem gameSystem;
 
@@ -15,6 +16,8 @@ public class GameController : MonoBehaviour
     {
         gameSystem = new GameSystem();
         UIController.Init();
+        QuestionController.Init();
+        Debug.Log(gameSystem.GetQuestion().Q);
     }
 
     private void SyncValue()

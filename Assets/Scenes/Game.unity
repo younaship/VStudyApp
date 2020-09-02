@@ -1085,6 +1085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIController: {fileID: 557672643}
   SceneController: {fileID: 557672642}
+  QuestionController: {fileID: 557672641}
 --- !u!114 &557672641
 MonoBehaviour:
   m_ObjectHideFlags: 0

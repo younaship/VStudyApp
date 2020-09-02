@@ -56,7 +56,7 @@ public class GameSystem
     {
         var min = GetStageInfo().MinQuestionDifficulty;
         var max = GetStageInfo().MaxQuestionDifficulty;
-
+        Debug.Log("getque");
         return QuestionSystem.GetQuestion(max); // 仮：最大
     }
 }
