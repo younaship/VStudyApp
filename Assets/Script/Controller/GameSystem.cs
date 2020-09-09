@@ -14,6 +14,7 @@ public class GameSystem
     public GameSystem()
     {
         QuestionSystem = new QuestionSystem();
+        this.QuestionSystem.CSVRead();
         StageSystem = new StageSystem();
         Init();
     }
@@ -56,7 +57,6 @@ public class GameSystem
     {
         var min = GetStageInfo().MinQuestionDifficulty;
         var max = GetStageInfo().MaxQuestionDifficulty;
-        Debug.Log("getque");
         return QuestionSystem.GetQuestion(max); // 仮：最大
     }
 }

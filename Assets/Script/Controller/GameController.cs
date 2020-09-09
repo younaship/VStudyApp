@@ -17,7 +17,6 @@ public class GameController : MonoBehaviour
         gameSystem = new GameSystem();
         UIController.Init();
         QuestionController.Init();
-        Debug.Log(gameSystem.GetQuestion().Q);
     }
 
     private void SyncValue()

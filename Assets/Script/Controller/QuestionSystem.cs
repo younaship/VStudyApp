@@ -5,26 +5,39 @@ using System.IO;
 
 public class QuestionSystem
 {
+    Dictionary<int, List<int>> outed = new Dictionary<int, List<int>>();
     Dictionary<int, List<Question>> questions = new Dictionary<int, List<Question>>();
     public Question GetQuestion(int difficulty)
     {
-        /* ここにリストから呼び出す処理　*/
-        //int count = questions[difficulty].Count;
+        int rndNum;
+        int n = questions[difficulty].Count;
+
+        do { rndNum = new System.Random().Next(n); } while (outed[difficulty].Contains(rndNum));
+        outed[difficulty].Add(n);
+
+        return
+
+
+        
+        
+
+
         return questions[2][1]; //Question.Null;
     }
 
     public void CSVRead()
     {
         string[] values = null;
-        using (var sr = new StreamReader(@"question.csv"))
+        var csvFile = Resources.Load("question") as TextAsset;
+        using (var sr = new StringReader(csvFile.text))
         {
-            
-            while (!sr.EndOfStream)
+            while (sr.Peek() > -1)
             {
                 var line = sr.ReadLine();
                 values = line.Split(',');
 
-                if (questions.ContainsKey(int.Parse(values[6]))){
+                if (questions.ContainsKey(int.Parse(values[6])))
+                {
                     questions[int.Parse(values[6])].Add(new Question(values[0], new string[] { values[1], values[2], values[3], values[4] }, int.Parse(values[5]), int.Parse(values[6])));
                 }
                 else
@@ -34,6 +47,6 @@ public class QuestionSystem
                 }
             }
         }
-        Debug.Log("csv");
+        Debug.Log(questions[2][1].Q);
     }
 }
