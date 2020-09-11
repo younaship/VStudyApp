@@ -11,18 +11,14 @@ public class QuestionSystem
     {
         int rndNum;
         int n = questions[difficulty].Count;
+        if (!outed.ContainsKey(difficulty)) outed.Add(difficulty, new List<int>());
 
+
+        if (n == outed[difficulty].Count) return Question.Null;
+        
         do { rndNum = new System.Random().Next(n); } while (outed[difficulty].Contains(rndNum));
         outed[difficulty].Add(n);
-
-        return
-
-
-        
-        
-
-
-        return questions[2][1]; //Question.Null;
+        return questions[difficulty][rndNum];
     }
 
     public void CSVRead()
