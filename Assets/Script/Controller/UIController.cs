@@ -13,8 +13,9 @@ class Config
 public class UIController : MonoBehaviour
 {
     public Slider HpSlider, CountSlider, EnemyHpSlider;
-    public Image HpSliderFillAria, EnemyHpSliderFillAria;  //aa
+    //public Image HpSliderFillAria, EnemyHpSliderFillAria;  //aa
     public Text questionText, centerText;
+    Image HpSliderFillAria, EnemyHpSliderFillAria;
 
     /// <summary>
     /// UIの初期化を行います。数値がデフォルト値になります。
@@ -22,8 +23,12 @@ public class UIController : MonoBehaviour
     public void Init()
     {
         SetCount(0, 1);
+
+        HpSliderFillAria = HpSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>();
+        EnemyHpSliderFillAria = EnemyHpSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>();
+
         HpSliderFillAria.color = Config.Fine;
-        //EnemyHpSliderFillAria.color = Config.Fine;  //aa
+        EnemyHpSliderFillAria.color = Config.Fine;
         centerText.color = new Color(0, 0, 0, 0);
         questionText.text = "";
     }
@@ -41,21 +46,32 @@ public class UIController : MonoBehaviour
         HpSlider.maxValue = max;
         HpSlider.value = now;
     }
-
-    public Action AddSetHpListener(Func<float> func)
+    public void SetHPEnemy(float now, float max)
     {
-        var col = StartCoroutine(HpWatcher(func));
+        EnemyHpSlider.minValue = 0;
+        EnemyHpSlider.maxValue = max;
+        EnemyHpSlider.value = now;
+    }
+
+    public Action AddSetHpListener(Func<float> func, bool isPlayer = true)
+    {
+
+        var col = StartCoroutine(HpWatcher(func, isPlayer));
         return () => StopCoroutine(col);
     }
 
-    IEnumerator HpWatcher(Func<float> func)
+    IEnumerator HpWatcher(Func<float> func, bool isPlayer)
     {
+
+        Slider slider = isPlayer ? HpSlider : EnemyHpSlider;
+        Image fillAria = isPlayer ? HpSliderFillAria : EnemyHpSliderFillAria;
+
         while (true)
         {
-            HpSlider.value = func();
-            if (HpSlider.value / HpSlider.maxValue > .3f ) HpSliderFillAria.color = Config.Fine; // HPごとのバー色
-            else HpSliderFillAria.color = Config.Warn;
-            Debug.Log(HpSlider.value+","+HpSlider.maxValue);
+            slider.value = func();
+            if (slider.value / slider.maxValue > .3f ) fillAria.color = Config.Fine; // HPごとのバー色
+            else fillAria.color = Config.Warn;
+            Debug.Log(slider.value+","+ slider.maxValue);
             yield return null;
         }
     }

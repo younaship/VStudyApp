@@ -43,6 +43,9 @@ public class GameController : MonoBehaviour
             UIController.Init();
             UIController.SetHP(gameSystem.Player.Hp, gameSystem.Player.MaxHp);
 
+            UIController.SetHPEnemy(stage.Enemy.Hp, stage.Enemy.MaxHp);
+
+            SceneController.SetStage(gameSystem);
         }
     }
 
@@ -51,6 +54,8 @@ public class GameController : MonoBehaviour
         var question = gameSystem.GetQuestion();
         var events = new List<Action>();
         events.Add(UIController.AddSetHpListener(() => gameSystem.Player.Hp));
+        events.Add(UIController.AddSetHpListener(() => gameSystem.GetStageInfo().Enemy.Hp, false));
+
         events.Add(UIController.StartCountDown(1, () => {
             ReciveDamage();
         }, true));
@@ -64,7 +69,7 @@ public class GameController : MonoBehaviour
             var damage = gameSystem.GetStageInfo().Enemy.Atk;
             var result = gameSystem.Player.AttackToMe(damage);
             SceneController.PlayAtackEnemy();//aaaaaa
-            Debug.Log("aaaaaaaaaaaaaaaa");
+            
             if (result == AttackAction.Kill)
             {
                 foreach (var e in events) e.Invoke();

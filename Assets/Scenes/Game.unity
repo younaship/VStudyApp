@@ -1295,9 +1295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HpSlider: {fileID: 1293576885}
   CountSlider: {fileID: 2118120491}
-  EnemyHpSlider: {fileID: 0}
-  HpSliderFillAria: {fileID: 1336145407}
-  EnemyHpSliderFillAria: {fileID: 0}
+  EnemyHpSlider: {fileID: 1706804289}
   questionText: {fileID: 1255077783}
   centerText: {fileID: 295786995}
 --- !u!114 &557672644
