@@ -8,9 +8,10 @@ public class SceneController : MonoBehaviour
 {
     public Image cover;
     public Image player, enemy;
-    
+
     Sprite player_def, player_atk, enemy_def, enemy_atk;
-    
+    Animator player_anim, enemy_anim;
+
     void SetPlayer(Sprite sprite)
     {
         player.sprite = sprite;
@@ -32,6 +33,9 @@ public class SceneController : MonoBehaviour
         this.player_atk = gameSystem.Player.Atack;
         this.enemy_def = gameSystem.GetStageInfo().Enemy.Normal;
         this.enemy_atk = gameSystem.GetStageInfo().Enemy.Atack;
+
+        this.player_anim = this.player.GetComponent<Animator>();
+        this.enemy_anim = this.enemy.GetComponent<Animator>();
 
         SetPlayer(this.player_def);
         SetEnemy(this.enemy_def);
@@ -64,7 +68,17 @@ public class SceneController : MonoBehaviour
     /// </summary>
     public void PlayAtackEnemy()
     {
-        
+        enemy_anim.SetTrigger("attack");
+        Debug.Log("aaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+    }
+
+    /// <summary>
+    /// 敵が攻撃するアニメーション効果を再生します。
+    /// </summary>
+    public void PlayAtackPlayer()
+    {
+        player_anim.SetTrigger("attack");
     }
 
     /// <summary>
@@ -72,7 +86,7 @@ public class SceneController : MonoBehaviour
     /// </summary>
     public void PlayAtackPeople()
     {
-
+        
     }
 
     /// <summary>

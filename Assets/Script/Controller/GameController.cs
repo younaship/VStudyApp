@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -56,14 +57,15 @@ public class GameController : MonoBehaviour
         events.Add(UIController.StartQuestion(question.Q,()=> {
 
         }));
-
         yield break;
 
         void ReciveDamage()
         {
             var damage = gameSystem.GetStageInfo().Enemy.Atk;
             var result = gameSystem.Player.AttackToMe(damage);
-            if(result == AttackAction.Kill)
+            SceneController.PlayAtackEnemy();//aaaaaa
+            Debug.Log("aaaaaaaaaaaaaaaa");
+            if (result == AttackAction.Kill)
             {
                 foreach (var e in events) e.Invoke();
                 StartCoroutine(DeathThread());

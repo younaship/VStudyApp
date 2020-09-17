@@ -12,8 +12,8 @@ class Config
 
 public class UIController : MonoBehaviour
 {
-    public Slider HpSlider, CountSlider;
-    public Image HpSliderFillAria;
+    public Slider HpSlider, CountSlider, EnemyHpSlider;
+    public Image HpSliderFillAria, EnemyHpSliderFillAria;  //aa
     public Text questionText, centerText;
 
     /// <summary>
@@ -23,6 +23,7 @@ public class UIController : MonoBehaviour
     {
         SetCount(0, 1);
         HpSliderFillAria.color = Config.Fine;
+        //EnemyHpSliderFillAria.color = Config.Fine;  //aa
         centerText.color = new Color(0, 0, 0, 0);
         questionText.text = "";
     }
@@ -52,7 +53,7 @@ public class UIController : MonoBehaviour
         while (true)
         {
             HpSlider.value = func();
-            if (HpSlider.value > 3f / HpSlider.maxValue) HpSliderFillAria.color = Config.Fine; // HPごとのバー色
+            if (HpSlider.value / HpSlider.maxValue > .3f ) HpSliderFillAria.color = Config.Fine; // HPごとのバー色
             else HpSliderFillAria.color = Config.Warn;
             Debug.Log(HpSlider.value+","+HpSlider.maxValue);
             yield return null;
