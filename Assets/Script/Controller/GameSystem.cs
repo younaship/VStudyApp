@@ -28,6 +28,9 @@ public class GameSystem
         Player = new Player();
         Player.Hp = 15;
         Player.MaxHp = 15;
+        Player.Atk = 100;
+        Player.Normal = Resources.Load<Sprite>("player_normal");
+        Player.Atack = Resources.Load<Sprite>("player_normal");
     }
 
     public void LoadDataFromLocal()

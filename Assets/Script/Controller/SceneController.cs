@@ -48,7 +48,7 @@ public class SceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 死亡後開始する前のアニメーションを行います。
+    /// 死亡後、開始する前(コンテニュー)のアニメーションを行います。
     /// </summary>
     public IEnumerator PlayContinue()
     {
@@ -61,6 +61,8 @@ public class SceneController : MonoBehaviour
     public IEnumerator PlayRoundStart(UIController ui, int round)
     {
         SetDark();
+        StartCoroutine(PlayPlayerJoin()); // join
+
         for(var i = 0; i <= 30; i++) // 1s . 16s
         {
             cover.color = new Color(0, 0, 0, 1 - i / 30f);
@@ -68,6 +70,25 @@ public class SceneController : MonoBehaviour
         }
         yield return ui.PlayCenterText($"Round {round}");
     }
+
+    /// <summary>
+    /// ラウンド終了時(Clear)のアニメーションを行います。
+    /// </summary>
+    public IEnumerator PlayRoundClear(UIController ui)
+    {
+        StartCoroutine(PlayPlayerNext()); // out
+
+        yield return new WaitForSeconds(.5f);
+
+        for (var i = 30; i >= 0; i--) // 1s . 16s
+        {
+            cover.color = new Color(0, 0, 0, 1 - i / 30f);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1);
+    }
+
 
     /// <summary>
     /// 敵が攻撃するアニメーション効果を再生します。
@@ -87,11 +108,20 @@ public class SceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 攻撃するアニメーションを再生します。
+    /// プレイヤーがステージに入ってくるアニメーションを行います。
     /// </summary>
-    public void PlayAtackPeople()
+    public IEnumerator PlayPlayerJoin()
     {
-        
+        yield return null;
+    }
+
+
+    /// <summary>
+    /// プレイヤーが次ステージに進むアニメーションを行います。
+    /// </summary>
+    public IEnumerator PlayPlayerNext()
+    {
+        yield return null;
     }
 
     /// <summary>
@@ -108,6 +138,5 @@ public class SceneController : MonoBehaviour
         }
         player.transform.rotation = r;
     }
-
     
 }

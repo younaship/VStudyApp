@@ -14,7 +14,8 @@ public class UIController : MonoBehaviour
 {
     public Slider HpSlider, CountSlider, EnemyHpSlider;
     //public Image HpSliderFillAria, EnemyHpSliderFillAria;  //aa
-    public Text questionText, centerText;
+    [SerializeField] Button[] buttons;
+    [SerializeField] Text questionText, centerText;
     Image HpSliderFillAria, EnemyHpSliderFillAria;
 
     /// <summary>
@@ -77,7 +78,6 @@ public class UIController : MonoBehaviour
             slider.value = func();
             if (slider.value / slider.maxValue > .3f ) fillAria.color = Config.Fine; // HPごとのバー色
             else fillAria.color = Config.Warn;
-            Debug.Log(slider.value+","+ slider.maxValue);
             yield return null;
         }
     }
@@ -144,5 +144,40 @@ public class UIController : MonoBehaviour
         }
         centerText.text = "";
     } 
+
+    /// <summary>
+    /// ボタンを受け付けます。
+    /// </summary>
+    /// <param name="callback">Callback: Press Button Index</param>
+    public Action GetOnPressAnswer(Action<int> callback)
+    {
+        for (var i = 0; i < buttons.Length; i++) 
+        {
+            int n = i;
+            buttons[i].onClick.RemoveAllListeners();
+            buttons[i].onClick.AddListener(() => {
+                callback(n);
+            });
+        }
+
+        Action act = () =>
+        {
+            foreach (var b in buttons) b.onClick.RemoveAllListeners();
+        };
+
+        return act;
+    }
+
+    /* Anim */
+
+    /// <summary>
+    /// 正解時のアニメ―ションを再生します。
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PlaySuccess()
+    {
+        Debug.Log("Success Anim");
+        yield break;
+    }
 
 }

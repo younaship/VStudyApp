@@ -64,9 +64,12 @@ public class GameController : MonoBehaviour
         events.Add(UIController.StartCountDown(1, () => {
             ReciveDamage();
         }, true));
-        events.Add(UIController.StartQuestion(question.Q,()=> {
+        events.Add(UIController.StartQuestion(question.Q));
 
-        }));
+        events.Add(UIController.GetOnPressAnswer(AnswerQuestion));
+
+        Debug.Log("Answer is " + question.A);
+
         yield break;
 
         void ReciveDamage()
@@ -80,6 +83,52 @@ public class GameController : MonoBehaviour
                 foreach (var e in events) e.Invoke();
                 StartCoroutine(DeathThread());
             }
+        }
+
+        void AtackDamage()
+        {
+            var damage = gameSystem.Player.Atk;
+            var result = gameSystem.GetStageInfo().Enemy.AttackToMe(damage);
+            SceneController.PlayAtackPlayer();
+
+            if (result == AttackAction.Kill)
+            {
+                foreach (var e in events) e.Invoke();
+                StartCoroutine(Next());
+            }
+        }
+
+        void AnswerQuestion(int index)
+        {
+            Debug.Log("Answerd : " + index);
+            if (index == question.A)
+            {
+                AtackDamage();
+                StartCoroutine(Success());
+            }
+            else
+            {
+                StartCoroutine(Miss());
+            }
+        }
+
+        IEnumerator Miss()
+        {
+            yield break;
+        }
+
+        IEnumerator Success()
+        {
+            SceneController.PlayAtackPlayer();
+            yield break;
+        }
+
+        IEnumerator Next()
+        {
+            gameSystem.GameConfig.NowRoundIndex++;
+
+            yield return SceneController.PlayRoundClear(UIController);
+            StartCoroutine(StartThread());
         }
     }
 
@@ -95,18 +144,6 @@ public class GameController : MonoBehaviour
         gameSystem.Continue();
         StartCoroutine(StartThread());
         yield break;
-    }
-
-    
-
-    /**/
-
-    IEnumerator RunQuestion()
-    {
-        while (true)
-        {
-            
-        }
     }
 
 }

@@ -17,6 +17,7 @@ public class DefaultStage : Stage
                 AttackRate = 1.0f,
                 MaxHp = 20,
                 Hp = 20,
+                Normal = Resources.Load<Sprite>("enemy_normal")
             },
             BackImage = Resources.Load<Sprite>("bg_normal")
         }; /* Debug */
