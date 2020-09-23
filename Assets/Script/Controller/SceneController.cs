@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class SceneController : MonoBehaviour
 {
-    public Image cover;
-    public Image player, enemy;
+    [SerializeField] Image cover;
+    [SerializeField] Image player, enemy;
+    [SerializeField] Image bgImage;
 
     Sprite player_def, player_atk, enemy_def, enemy_atk;
     Animator player_anim, enemy_anim;
@@ -27,6 +28,9 @@ public class SceneController : MonoBehaviour
         cover.color = new Color(0, 0, 0, 1);
     }
 
+    /// <summary>
+    /// 現在のステージを用意します。
+    /// </summary>
     public void SetStage(GameSystem gameSystem)
     {
         this.player_def = gameSystem.Player.Normal;
@@ -36,6 +40,8 @@ public class SceneController : MonoBehaviour
 
         this.player_anim = this.player.GetComponent<Animator>();
         this.enemy_anim = this.enemy.GetComponent<Animator>();
+
+        this.bgImage.sprite = gameSystem.GetStageInfo().BackImage;
 
         SetPlayer(this.player_def);
         SetEnemy(this.enemy_def);

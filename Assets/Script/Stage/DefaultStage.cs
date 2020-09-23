@@ -1,8 +1,14 @@
-﻿public class DefaultStage : Stage
+﻿using UnityEngine;
+
+public class DefaultStage : Stage
 {
-    public override StageInfo GetStage(int index)
+
+    StageInfo stageInfo;
+
+    public DefaultStage(GameSystem gameSystem) : base(gameSystem)
     {
-        return new StageInfo() {
+        this.stageInfo = new StageInfo()
+        {
             MinQuestionDifficulty = 1,
             MaxQuestionDifficulty = 2,
             Enemy = new Enemy()
@@ -10,7 +16,14 @@
                 Atk = 3,
                 AttackRate = 1.0f,
                 MaxHp = 20,
-            }
+                Hp = 20,
+            },
+            BackImage = Resources.Load<Sprite>("bg_normal")
         }; /* Debug */
+    }
+
+    public override StageInfo GetStage(int index)
+    {
+        return this.stageInfo;
     }
 }

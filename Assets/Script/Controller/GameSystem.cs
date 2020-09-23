@@ -13,15 +13,16 @@ public class GameSystem
 
     public GameSystem()
     {
-        QuestionSystem = new QuestionSystem();
-        this.QuestionSystem.CSVRead();
-        StageSystem = new StageSystem();
         Init();
     }
 
     private void Init()
     {
-        LoadDataFromLocal();
+        QuestionSystem = new QuestionSystem();
+        QuestionSystem.ReadFromCSV();
+
+        this.LoadDataFromLocal();
+        StageSystem = new StageSystem(this);
 
         /* DEBUG */
         Player = new Player();
@@ -51,6 +52,7 @@ public class GameSystem
     public void Continue()
     {
         Player.Hp = Player.MaxHp; // 回復
+        GameConfig.NowRoundIndex = 0;
     }
 
     public Question GetQuestion()
@@ -64,6 +66,7 @@ public class GameSystem
 [Serializable]
 public class GameConfig
 {
+    public string NowStageName;
     public int NowRoundIndex;
     public Player Player;
 }

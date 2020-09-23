@@ -39,13 +39,19 @@ public class UIController : MonoBehaviour
         CountSlider.value = now;
         CountSlider.maxValue = max;
     }
-
+    /*
+    public void SetBgImage(Sprite sprite)
+    {
+        this.BgImage.sprite = sprite;
+    }
+    */
     public void SetHP(float now, float max)
     {
         HpSlider.minValue = 0;
         HpSlider.maxValue = max;
         HpSlider.value = now;
     }
+
     public void SetHPEnemy(float now, float max)
     {
         EnemyHpSlider.minValue = 0;

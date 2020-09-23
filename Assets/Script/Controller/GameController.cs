@@ -29,6 +29,11 @@ public class GameController : MonoBehaviour
     {
         StartCoroutine(StartThread());
     }
+
+    public void InitStage()
+    {
+
+    }
     
     IEnumerator StartThread()
     {
@@ -68,7 +73,7 @@ public class GameController : MonoBehaviour
         {
             var damage = gameSystem.GetStageInfo().Enemy.Atk;
             var result = gameSystem.Player.AttackToMe(damage);
-            SceneController.PlayAtackEnemy();//aaaaaa
+            SceneController.PlayAtackEnemy();
             
             if (result == AttackAction.Kill)
             {

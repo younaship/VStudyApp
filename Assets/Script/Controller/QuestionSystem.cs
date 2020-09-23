@@ -21,7 +21,7 @@ public class QuestionSystem
         return questions[difficulty][rndNum];
     }
 
-    public void CSVRead()
+    public void ReadFromCSV()
     {
         string[] values = null;
         var csvFile = Resources.Load("question") as TextAsset;
