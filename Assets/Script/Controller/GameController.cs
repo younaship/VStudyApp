@@ -80,8 +80,8 @@ public class GameController : MonoBehaviour
             
             if (result == AttackAction.Kill)
             {
-                foreach (var e in events) e.Invoke();
                 StartCoroutine(DeathThread());
+                foreach (var e in events) e.Invoke();
             }
         }
 
@@ -94,6 +94,7 @@ public class GameController : MonoBehaviour
             if (result == AttackAction.Kill)
             {
                 foreach (var e in events) e.Invoke();
+                UIController.SetHPEnemy(0, 1);
                 StartCoroutine(Next());
             }
         }
@@ -125,9 +126,9 @@ public class GameController : MonoBehaviour
 
         IEnumerator Next()
         {
-            gameSystem.GameConfig.NowRoundIndex++;
-
             yield return SceneController.PlayRoundClear(UIController);
+
+            gameSystem.NextStage();
             StartCoroutine(StartThread());
         }
     }

@@ -26,8 +26,8 @@ public class GameSystem
 
         /* DEBUG */
         Player = new Player();
-        Player.Hp = 15;
-        Player.MaxHp = 15;
+        Player.Hp = 35;
+        Player.MaxHp = 35;
         Player.Atk = 100;
         Player.Normal = Resources.Load<Sprite>("player_normal");
         Player.Atack = Resources.Load<Sprite>("player_normal");
@@ -56,6 +56,11 @@ public class GameSystem
     {
         Player.Hp = Player.MaxHp; // 回復
         GameConfig.NowRoundIndex = 0;
+    }
+
+    public void NextStage()
+    {
+        this.GameConfig.NowRoundIndex++;
     }
 
     public Question GetQuestion()

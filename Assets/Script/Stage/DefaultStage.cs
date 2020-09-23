@@ -7,6 +7,7 @@ public class DefaultStage : Stage
 
     public DefaultStage(GameSystem gameSystem) : base(gameSystem)
     {
+        /*
         this.stageInfo = new StageInfo()
         {
             MinQuestionDifficulty = 1,
@@ -25,6 +26,19 @@ public class DefaultStage : Stage
 
     public override StageInfo GetStage(int index)
     {
-        return this.stageInfo;
+        return new StageInfo()
+        {
+            MinQuestionDifficulty = 1,
+            MaxQuestionDifficulty = 2,
+            Enemy = new Enemy()
+            {
+                Atk = 3,
+                AttackRate = 2.0f,
+                MaxHp = 20,
+                Hp = 20,
+                Normal = Resources.Load<Sprite>("enemy_normal")
+            },
+            BackImage = Resources.Load<Sprite>("bg_normal")
+        };
     }
 }
