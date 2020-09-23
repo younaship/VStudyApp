@@ -68,17 +68,16 @@ public class SceneController : MonoBehaviour
     /// </summary>
     public void PlayAtackEnemy()
     {
-        enemy_anim.SetTrigger("attack");
-        Debug.Log("aaaaaaaaaaaaaaaaaaaaaaaaaa");
+        enemy_anim.SetTrigger("enemyAttack");
 
     }
 
     /// <summary>
-    /// 敵が攻撃するアニメーション効果を再生します。
+    /// プレイヤーが攻撃するアニメーション効果を再生します。
     /// </summary>
     public void PlayAtackPlayer()
     {
-        player_anim.SetTrigger("attack");
+        player_anim.SetTrigger("playerAttack");
     }
 
     /// <summary>

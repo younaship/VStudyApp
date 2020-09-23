@@ -9,7 +9,7 @@ public class AnimatorScript : StateMachineBehaviour
     GameObject player, enemy;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (animator.name.Equals("PlayerAnimation"))
+        if (animator.name.Equals("PlayerImage"))
         {
             enemy=GameObject.Find("EnemyImage");
             enemy.GetComponent<Animator>().SetBool("enemyWait", true);
@@ -30,7 +30,7 @@ public class AnimatorScript : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (animator.name.Equals("PlayerAnimation"))
+        if (animator.name.Equals("PlayerImage"))
         {
             enemy = GameObject.Find("EnemyImage");
             enemy.GetComponent<Animator>().SetBool("enemyWait", false);
