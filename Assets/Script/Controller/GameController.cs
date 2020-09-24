@@ -61,7 +61,7 @@ public class GameController : MonoBehaviour
         events.Add(UIController.AddSetHpListener(() => gameSystem.Player.Hp));
         events.Add(UIController.AddSetHpListener(() => gameSystem.GetStageInfo().Enemy.Hp, false));
 
-        events.Add(UIController.StartCountDown(1, () => {
+        events.Add(UIController.StartCountDown(gameSystem.GetStageInfo().Enemy.AttackRate, () => {
             ReciveDamage();
         }, true));
         events.Add(UIController.StartQuestion(question.Q));
