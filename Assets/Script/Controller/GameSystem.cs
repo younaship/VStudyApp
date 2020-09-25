@@ -77,4 +77,5 @@ public class GameConfig
     public string NowStageName;
     public int NowRoundIndex;
     public Player Player;
+    public int Money;
 }

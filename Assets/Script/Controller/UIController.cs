@@ -12,10 +12,14 @@ class Config
 
 public class UIController : MonoBehaviour
 {
-    public Slider HpSlider, CountSlider, EnemyHpSlider;
-    //public Image HpSliderFillAria, EnemyHpSliderFillAria;  //aa
+    [SerializeField] Canvas canvas;
+    [SerializeField] Slider hpSlider, countSlider, enemyHpSlider;
     [SerializeField] Button[] buttons;
-    [SerializeField] Text questionText, centerText;
+    [SerializeField] Text statusAtkText, statusMoneyText, statusHpText;
+    [SerializeField] Text questionText, centerText, roundText;
+
+    [SerializeField] GameObject pre_ResultWindow;
+
     Image HpSliderFillAria, EnemyHpSliderFillAria;
 
     /// <summary>
@@ -25,8 +29,8 @@ public class UIController : MonoBehaviour
     {
         SetCount(0, 1);
 
-        HpSliderFillAria = HpSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>();
-        EnemyHpSliderFillAria = EnemyHpSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>();
+        HpSliderFillAria = hpSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>();
+        EnemyHpSliderFillAria = enemyHpSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>();
 
         HpSliderFillAria.color = Config.Fine;
         EnemyHpSliderFillAria.color = Config.Fine;
@@ -36,28 +40,35 @@ public class UIController : MonoBehaviour
 
     void SetCount(int now, int max)
     {
-        CountSlider.minValue = 0;
-        CountSlider.value = now;
-        CountSlider.maxValue = max;
+        countSlider.minValue = 0;
+        countSlider.value = now;
+        countSlider.maxValue = max;
     }
-    /*
-    public void SetBgImage(Sprite sprite)
+
+    public void SetRound(int round)
     {
-        this.BgImage.sprite = sprite;
+        roundText.text = $"{round}";
     }
-    */
+
+    public void SetStatus(float atk, float hp, float money)
+    {
+        statusAtkText.text = $"{atk}";
+        statusHpText.text = $"{hp}";
+        statusMoneyText.text = $"{money}";
+    }
+
     public void SetHP(float now, float max)
     {
-        HpSlider.minValue = 0;
-        HpSlider.maxValue = max;
-        HpSlider.value = now;
+        hpSlider.minValue = 0;
+        hpSlider.maxValue = max;
+        hpSlider.value = now;
     }
 
     public void SetHPEnemy(float now, float max)
     {
-        EnemyHpSlider.minValue = 0;
-        EnemyHpSlider.maxValue = max;
-        EnemyHpSlider.value = now;
+        enemyHpSlider.minValue = 0;
+        enemyHpSlider.maxValue = max;
+        enemyHpSlider.value = now;
     }
 
     public Action AddSetHpListener(Func<float> func, bool isPlayer = true)
@@ -70,7 +81,7 @@ public class UIController : MonoBehaviour
     IEnumerator HpWatcher(Func<float> func, bool isPlayer)
     {
 
-        Slider slider = isPlayer ? HpSlider : EnemyHpSlider;
+        Slider slider = isPlayer ? hpSlider : enemyHpSlider;
         Image fillAria = isPlayer ? HpSliderFillAria : EnemyHpSliderFillAria;
 
         while (true)
@@ -97,13 +108,13 @@ public class UIController : MonoBehaviour
         do
         {
             var time = Time.time;
-            CountSlider.minValue = 0;
-            CountSlider.value = 1f;
-            CountSlider.maxValue = 1f;
+            countSlider.minValue = 0;
+            countSlider.value = 1f;
+            countSlider.maxValue = 1f;
             while (Time.time < time + sec)
             {
                 var par = (Time.time - time) / sec;
-                CountSlider.value = 1 - par;
+                countSlider.value = 1 - par;
                 yield return null;
             }
             callback?.Invoke();
@@ -174,10 +185,22 @@ public class UIController : MonoBehaviour
     /// 正解時のアニメ―ションを再生します。
     /// </summary>
     /// <returns></returns>
-    IEnumerator PlaySuccess()
+    public void PlaySuccess(Question question)
     {
+        var rw = Instantiate(pre_ResultWindow, canvas.transform).GetComponent<Result_Window_Attr>();
+        rw.Set(Result_Window_Attr.Type.Success, question);
         Debug.Log("Success Anim");
-        yield break;
+    }
+
+    /// <summary>
+    /// 失敗時のアニメ―ションを再生します。
+    /// </summary>
+    /// <returns></returns>
+    public void PlayFailure(Question question)
+    {
+        var rw = Instantiate(pre_ResultWindow, canvas.transform).GetComponent<Result_Window_Attr>();
+        rw.Set(Result_Window_Attr.Type.Failure, question);
+        Debug.Log("Success Anim");
     }
 
 }

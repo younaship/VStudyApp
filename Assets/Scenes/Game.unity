@@ -544,7 +544,7 @@ GameObject:
   - component: {fileID: 103741953}
   - component: {fileID: 103741952}
   m_Layer: 5
-  m_Name: Text
+  m_Name: StatusMoneyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1281,9 +1281,9 @@ RectTransform:
   - {fileID: 227747824}
   - {fileID: 1342240835}
   - {fileID: 1999338588}
-  - {fileID: 753424256}
   - {fileID: 1412115172}
   - {fileID: 1791077929}
+  - {fileID: 753424256}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1594,16 +1594,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1f8d0d2af9562f4f8395eed11595d97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HpSlider: {fileID: 1293576885}
-  CountSlider: {fileID: 2118120491}
-  EnemyHpSlider: {fileID: 1706804289}
+  canvas: {fileID: 432502017}
+  hpSlider: {fileID: 1293576885}
+  countSlider: {fileID: 2118120491}
+  enemyHpSlider: {fileID: 1706804289}
   buttons:
   - {fileID: 39544770}
   - {fileID: 142527945}
   - {fileID: 1618534945}
   - {fileID: 144249002}
+  statusAtkText: {fileID: 913450183}
+  statusMoneyText: {fileID: 103741952}
+  statusHpText: {fileID: 579396066}
   questionText: {fileID: 1255077783}
   centerText: {fileID: 295786995}
+  roundText: {fileID: 1379446783}
+  pre_ResultWindow: {fileID: 6641058854728313041, guid: d7d23e06559bffa45b172147d8a68797,
+    type: 3}
 --- !u!114 &557672644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1664,7 +1671,7 @@ GameObject:
   - component: {fileID: 579396067}
   - component: {fileID: 579396066}
   m_Layer: 5
-  m_Name: Text
+  m_Name: StatusHpText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1940,7 +1947,7 @@ RectTransform:
   - {fileID: 1618534944}
   - {fileID: 144249001}
   m_Father: {fileID: 432502018}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -2178,7 +2185,7 @@ GameObject:
   - component: {fileID: 913450184}
   - component: {fileID: 913450183}
   m_Layer: 5
-  m_Name: Text
+  m_Name: StatusAtkText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2938,7 +2945,7 @@ GameObject:
   - component: {fileID: 1379446784}
   - component: {fileID: 1379446783}
   m_Layer: 5
-  m_Name: Text
+  m_Name: RoundText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3038,7 +3045,7 @@ RectTransform:
   - {fileID: 1080264994}
   - {fileID: 1420975579}
   m_Father: {fileID: 432502018}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -3782,7 +3789,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 432502018}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

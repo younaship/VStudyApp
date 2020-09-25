@@ -45,11 +45,14 @@ public class GameController : MonoBehaviour
         void SetBattleFeild()
         {
             var stage = gameSystem.GetStageInfo();
+            var p = gameSystem.Player;
             UIController.Init();
             UIController.SetHP(gameSystem.Player.Hp, gameSystem.Player.MaxHp);
+            UIController.SetRound(gameSystem.GameConfig.NowRoundIndex);
+            UIController.SetStatus(p.Atk, p.MaxHp, gameSystem.GameConfig.Money);
 
             UIController.SetHPEnemy(stage.Enemy.Hp, stage.Enemy.MaxHp);
-
+           
             SceneController.SetStage(gameSystem);
         }
     }
@@ -115,12 +118,14 @@ public class GameController : MonoBehaviour
 
         IEnumerator Miss()
         {
+            UIController.PlayFailure(question);
             yield break;
         }
 
         IEnumerator Success()
         {
             SceneController.PlayAtackPlayer();
+            UIController.PlaySuccess(question);
             yield break;
         }
 
