@@ -78,7 +78,7 @@ public class SceneController : MonoBehaviour
     {
         StartCoroutine(PlayPlayerNext()); // out
 
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(1.8f);
 
         for (var i = 30; i >= 0; i--) // 1s . 16s
         {
@@ -112,7 +112,7 @@ public class SceneController : MonoBehaviour
     /// </summary>
     public IEnumerator PlayPlayerJoin()
     {
-        player_anim.Play("PlayerEnter");
+        player_anim.SetTrigger("playerEnter");
         yield return null;
     }
 
@@ -122,7 +122,7 @@ public class SceneController : MonoBehaviour
     /// </summary>
     public IEnumerator PlayPlayerNext()
     {
-        player_anim.Play("PlayerExit");
+        player_anim.SetTrigger("playerExit");
         yield return null;
     }
 
