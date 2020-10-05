@@ -112,6 +112,7 @@ public class SceneController : MonoBehaviour
     /// </summary>
     public IEnumerator PlayPlayerJoin()
     {
+        player_anim.Play("PlayerEnter");
         yield return null;
     }
 
@@ -121,6 +122,7 @@ public class SceneController : MonoBehaviour
     /// </summary>
     public IEnumerator PlayPlayerNext()
     {
+        player_anim.Play("PlayerExit");
         yield return null;
     }
 
