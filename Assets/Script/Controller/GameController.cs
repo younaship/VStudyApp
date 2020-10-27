@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
     {
         SetBattleFeild();
 
-        yield return SceneController.PlayRoundStart(UIController, gameSystem.GameConfig.NowRoundIndex);
+        yield return SceneController.PlayRoundStart(UIController, gameSystem);
         StartCoroutine(BattleThread());
 
         void SetBattleFeild()

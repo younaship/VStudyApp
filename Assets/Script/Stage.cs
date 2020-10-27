@@ -15,7 +15,7 @@ public abstract class Stage : IStage
 
 public class StageInfo
 {
-    public bool IsShop;
+    public StageType type = StageType.battle;
     public Enemy Enemy;
     public Item DropItem;
 
@@ -23,4 +23,9 @@ public class StageInfo
 
     public int MinQuestionDifficulty;
     public int MaxQuestionDifficulty;
+}
+
+public enum StageType
+{
+    battle, shop
 }
