@@ -58,7 +58,7 @@ public class SceneController : MonoBehaviour
     /// <summary>
     /// ラウンド開始時のアニメーションを行います。
     /// </summary>
-    public IEnumerator PlayRoundStart(UIController ui, int round)
+    public IEnumerator PlayRoundStart(UIController ui, GameSystem gameSystem)
     {
         SetDark();
         StartCoroutine(PlayPlayerJoin()); // join
@@ -68,7 +68,10 @@ public class SceneController : MonoBehaviour
             cover.color = new Color(0, 0, 0, 1 - i / 30f);
             yield return null;
         }
-        yield return ui.PlayCenterText($"Round {round}");
+
+        var stage = gameSystem.GetStageInfo();
+        if (stage.type == StageType.shop) yield return ui.PlayCenterText("ショップを見つけた");
+        else yield return ui.PlayCenterText($"Round {gameSystem.GameConfig.NowRoundIndex}");
     }
 
     /// <summary>

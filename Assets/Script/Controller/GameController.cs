@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
     {
         SetBattleFeild();
 
-        yield return SceneController.PlayRoundStart(UIController, gameSystem.GameConfig.NowRoundIndex);
+        yield return SceneController.PlayRoundStart(UIController, gameSystem);
         StartCoroutine(BattleThread());
 
         void SetBattleFeild()
@@ -67,7 +67,7 @@ public class GameController : MonoBehaviour
         events.Add(UIController.StartCountDown(gameSystem.GetStageInfo().Enemy.AttackRate, () => {
             ReciveDamage();
         }, true));
-        events.Add(UIController.StartQuestion(question.Q));
+        events.Add(UIController.StartQuestion(question));
 
         events.Add(UIController.GetOnPressAnswer(AnswerQuestion));
 

@@ -26,6 +26,22 @@ public class DefaultStage : Stage
 
     public override StageInfo GetStage(int index)
     {
+        if(index == 1) return new StageInfo()
+        {
+            type = StageType.shop,
+            MinQuestionDifficulty = 1,
+            MaxQuestionDifficulty = 2,
+            Enemy = new Enemy()
+            {
+                Atk = 3,
+                AttackRate = 2.0f,
+                MaxHp = 20,
+                Hp = 20,
+                Normal = Resources.Load<Sprite>("enemy_normal")
+            },
+            BackImage = Resources.Load<Sprite>("bg_normal")
+        };
+
         return new StageInfo()
         {
             MinQuestionDifficulty = 1,

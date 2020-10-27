@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 class Config
 {
@@ -16,7 +17,7 @@ public class UIController : MonoBehaviour
     [SerializeField] Slider hpSlider, countSlider, enemyHpSlider;
     [SerializeField] Button[] buttons;
     [SerializeField] Text statusAtkText, statusMoneyText, statusHpText;
-    [SerializeField] Text questionText, centerText, roundText;
+    [SerializeField] Text questionText, answerText, centerText, roundText;
 
     [SerializeField] GameObject pre_ResultWindow;
 
@@ -27,7 +28,7 @@ public class UIController : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        SetCount(0, 1);
+        SetCount(1, 1);
 
         HpSliderFillAria = hpSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>();
         EnemyHpSliderFillAria = enemyHpSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>();
@@ -36,6 +37,7 @@ public class UIController : MonoBehaviour
         EnemyHpSliderFillAria.color = Config.Fine;
         centerText.color = new Color(0, 0, 0, 0);
         questionText.text = "";
+        answerText.text = "";
     }
 
     void SetCount(int now, int max)
@@ -121,17 +123,21 @@ public class UIController : MonoBehaviour
         } while (repeat);
     }
 
-    public Action StartQuestion(string message, Action callback = null)
+    public Action StartQuestion(Question question, Action callback = null)
     {
-        var col = StartCoroutine(PlayQuestion(message, callback));
+        var col = StartCoroutine(PlayQuestion(question, callback));
         return () => StopCoroutine(col);
     }
 
-    IEnumerator PlayQuestion(string mes, Action act)
+    IEnumerator PlayQuestion(Question question, Action act)
     {
+        var Words = new char[] { 'A', 'B', 'C', 'D' };
+        answerText.text = "";
         questionText.text = "";
+        for (var i = 0; i < question.As.Length; i++) answerText.text += $"{Words[i]} : {question.As[i]}\n";
+        //question.As.Select((a, i) => answerText.text += $"{Words[i]} : {a}");
         const float TIME = 0.1f;
-        foreach (char c in mes)
+        foreach (char c in question.Q)
         {
             questionText.text += c;
             yield return new WaitForSeconds(TIME);
