@@ -40,20 +40,22 @@ public class GameController : MonoBehaviour
         SetBattleFeild();
 
         yield return SceneController.PlayRoundStart(UIController, gameSystem);
-        StartCoroutine(BattleThread());
 
         void SetBattleFeild()
         {
             var stage = gameSystem.GetStageInfo();
-            var p = gameSystem.Player;
-            UIController.Init();
-            UIController.SetHP(gameSystem.Player.Hp, gameSystem.Player.MaxHp);
-            UIController.SetRound(gameSystem.GameConfig.NowRoundIndex);
-            UIController.SetStatus(p.Atk, p.MaxHp, gameSystem.GameConfig.Money);
+            UIController.SetUI(gameSystem);
 
-            UIController.SetHPEnemy(stage.Enemy.Hp, stage.Enemy.MaxHp);
-           
-            SceneController.SetStage(gameSystem);
+            switch (stage.Type)
+            {
+                case StageType.battle:
+                    SceneController.SetBattleStage(gameSystem);
+                    StartCoroutine(BattleThread());
+                    break;
+
+                case StageType.shop:
+                    break;
+            }
         }
     }
 

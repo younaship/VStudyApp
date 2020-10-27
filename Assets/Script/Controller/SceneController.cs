@@ -29,9 +29,9 @@ public class SceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 現在のステージを用意します。
+    /// 現在の戦闘ステージを用意します。
     /// </summary>
-    public void SetStage(GameSystem gameSystem)
+    public void SetBattleStage(GameSystem gameSystem)
     {
         this.player_def = gameSystem.Player.Normal;
         this.player_atk = gameSystem.Player.Atack;
@@ -45,6 +45,10 @@ public class SceneController : MonoBehaviour
 
         SetPlayer(this.player_def);
         SetEnemy(this.enemy_def);
+    }
+
+    public void SetShopStage(GameSystem gameSystem)
+    {
     }
 
     /// <summary>
@@ -70,7 +74,7 @@ public class SceneController : MonoBehaviour
         }
 
         var stage = gameSystem.GetStageInfo();
-        if (stage.type == StageType.shop) yield return ui.PlayCenterText("ショップを見つけた");
+        if (stage.Type == StageType.shop) yield return ui.PlayCenterText("ショップを見つけた");
         else yield return ui.PlayCenterText($"Round {gameSystem.GameConfig.NowRoundIndex}");
     }
 

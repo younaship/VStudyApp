@@ -28,7 +28,7 @@ public class DefaultStage : Stage
     {
         if(index == 1) return new StageInfo()
         {
-            type = StageType.shop,
+            Type = StageType.shop,
             MinQuestionDifficulty = 1,
             MaxQuestionDifficulty = 2,
             Enemy = new Enemy()

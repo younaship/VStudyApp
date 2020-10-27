@@ -40,6 +40,31 @@ public class UIController : MonoBehaviour
         answerText.text = "";
     }
 
+    public void SetUI(GameSystem gameSystem)
+    {
+        var stage = gameSystem.GetStageInfo();
+        var uis = this.canvas.GetComponentsInChildren<UIType>();
+
+        this.Init();
+
+        switch (gameSystem.GetStageInfo().Type)
+        {
+            case StageType.battle:
+                foreach (var ui in uis) ui.ChangeTo(UIType.Type.InBattle);
+                var p = gameSystem.Player;
+                this.SetHP(gameSystem.Player.Hp, gameSystem.Player.MaxHp);
+                this.SetRound(gameSystem.GameConfig.NowRoundIndex);
+                this.SetStatus(p.Atk, p.MaxHp, gameSystem.GameConfig.Money);
+
+                this.SetHPEnemy(stage.Enemy.Hp, stage.Enemy.MaxHp);
+                break;
+
+            case StageType.shop:
+                foreach (var ui in uis) ui.SetDisabled();//ui.ChangeTo(UIType.Type.InShop);
+                break;
+        }
+    }
+
     void SetCount(int now, int max)
     {
         countSlider.minValue = 0;
