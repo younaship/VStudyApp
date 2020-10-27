@@ -35,13 +35,13 @@ public class SceneController : MonoBehaviour
     {
         this.player_def = gameSystem.Player.Normal;
         this.player_atk = gameSystem.Player.Atack;
-        this.enemy_def = gameSystem.GetStageInfo().Enemy.Normal;
-        this.enemy_atk = gameSystem.GetStageInfo().Enemy.Atack;
+        this.enemy_def = gameSystem.GetBattleRound().Enemy.Normal;
+        this.enemy_atk = gameSystem.GetBattleRound().Enemy.Atack;
 
         this.player_anim = this.player.GetComponent<Animator>();
         this.enemy_anim = this.enemy.GetComponent<Animator>();
 
-        this.bgImage.sprite = gameSystem.GetStageInfo().BackImage;
+        this.bgImage.sprite = gameSystem.GetBattleRound().BackImage;
 
         SetPlayer(this.player_def);
         SetEnemy(this.enemy_def);
@@ -73,7 +73,7 @@ public class SceneController : MonoBehaviour
             yield return null;
         }
 
-        var stage = gameSystem.GetStageInfo();
+        var stage = gameSystem.GetRound();
         if (stage.Type == StageType.shop) yield return ui.PlayCenterText("ショップを見つけた");
         else yield return ui.PlayCenterText($"Round {gameSystem.GameConfig.NowRoundIndex}");
     }

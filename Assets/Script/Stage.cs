@@ -8,12 +8,6 @@ public interface IStage
     StageInfo GetStage(int index);
 }
 
-public abstract class Stage : IStage
-{
-    public Stage(GameSystem gameSystem) { }
-    public abstract StageInfo GetStage(int index);
-}
-
 public class StageInfo
 {
     public StageType Type = StageType.battle;
@@ -27,14 +21,26 @@ public class StageInfo
 }
 */
 
-
-public class Stage
+public abstract class Stage //: IStage
 {
-    public StageType Type = StageType.battle;
+    public Stage(GameSystem gameSystem) { }
+    //public abstract StageInfo GetStage(int index);
+    public abstract Round GetRound(int index);
 }
 
-public class BattleStage: Stage
+
+public class Round
 {
+    public StageType Type;
+}
+
+public class ButtleRound : Round
+{
+    public ButtleRound()
+    {
+        this.Type = StageType.battle;
+    }
+
     public Enemy Enemy;
     public Item DropItem;
 
@@ -44,9 +50,12 @@ public class BattleStage: Stage
     public int MaxQuestionDifficulty;
 }
 
-public class Shop: Stage
+public class ShopRound : Round
 {
-
+    public ShopRound()
+    {
+        this.Type = StageType.shop;
+    }
 }
 
 public enum StageType

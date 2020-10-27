@@ -42,21 +42,24 @@ public class UIController : MonoBehaviour
 
     public void SetUI(GameSystem gameSystem)
     {
-        var stage = gameSystem.GetStageInfo();
+        var stage = gameSystem.GetRound();
         var uis = this.canvas.GetComponentsInChildren<UIType>();
 
         this.Init();
 
-        switch (gameSystem.GetStageInfo().Type)
+        switch (stage.Type)
         {
             case StageType.battle:
+
+                var _stage = stage as ButtleRound;
+
                 foreach (var ui in uis) ui.ChangeTo(UIType.Type.InBattle);
                 var p = gameSystem.Player;
                 this.SetHP(gameSystem.Player.Hp, gameSystem.Player.MaxHp);
                 this.SetRound(gameSystem.GameConfig.NowRoundIndex);
                 this.SetStatus(p.Atk, p.MaxHp, gameSystem.GameConfig.Money);
 
-                this.SetHPEnemy(stage.Enemy.Hp, stage.Enemy.MaxHp);
+                this.SetHPEnemy(_stage.Enemy.Hp, _stage.Enemy.MaxHp);
                 break;
 
             case StageType.shop:

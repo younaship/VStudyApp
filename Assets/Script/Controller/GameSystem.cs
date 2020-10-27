@@ -47,9 +47,14 @@ public class GameSystem
         PlayerPrefs.SetString("gameconfig", json);
     }
 
-    public StageInfo GetStageInfo()
+    public Round GetRound()
     {
-        return this.StageSystem.CurrentStage.GetStage(this.GameConfig.NowRoundIndex);
+        return this.StageSystem.CurrentStage.GetRound(this.GameConfig.NowRoundIndex);
+    }
+
+    public ButtleRound GetBattleRound()
+    {
+        return GetRound() as ButtleRound;
     }
 
     public void Continue()
@@ -65,8 +70,8 @@ public class GameSystem
 
     public Question GetQuestion()
     {
-        var min = GetStageInfo().MinQuestionDifficulty;
-        var max = GetStageInfo().MaxQuestionDifficulty;
+        var min = GetBattleRound().MinQuestionDifficulty;
+        var max = GetBattleRound().MaxQuestionDifficulty;
         return QuestionSystem.GetQuestion(max); // 仮：最大
     }
 }

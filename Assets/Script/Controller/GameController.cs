@@ -43,7 +43,7 @@ public class GameController : MonoBehaviour
 
         void SetBattleFeild()
         {
-            var stage = gameSystem.GetStageInfo();
+            var stage = gameSystem.GetRound();
             UIController.SetUI(gameSystem);
 
             switch (stage.Type)
@@ -64,9 +64,9 @@ public class GameController : MonoBehaviour
         var question = gameSystem.GetQuestion();
         var events = new List<Action>();
         events.Add(UIController.AddSetHpListener(() => gameSystem.Player.Hp));
-        events.Add(UIController.AddSetHpListener(() => gameSystem.GetStageInfo().Enemy.Hp, false));
+        events.Add(UIController.AddSetHpListener(() => gameSystem.GetBattleRound().Enemy.Hp, false));
 
-        events.Add(UIController.StartCountDown(gameSystem.GetStageInfo().Enemy.AttackRate, () => {
+        events.Add(UIController.StartCountDown(gameSystem.GetBattleRound().Enemy.AttackRate, () => {
             ReciveDamage();
         }, true));
         events.Add(UIController.StartQuestion(question));
@@ -79,7 +79,7 @@ public class GameController : MonoBehaviour
 
         void ReciveDamage()
         {
-            var damage = gameSystem.GetStageInfo().Enemy.Atk;
+            var damage = gameSystem.GetBattleRound().Enemy.Atk;
             var result = gameSystem.Player.AttackToMe(damage);
             SceneController.PlayAtackEnemy();
             
@@ -93,7 +93,7 @@ public class GameController : MonoBehaviour
         void AtackDamage()
         {
             var damage = gameSystem.Player.Atk;
-            var result = gameSystem.GetStageInfo().Enemy.AttackToMe(damage);
+            var result = gameSystem.GetBattleRound().Enemy.AttackToMe(damage);
             SceneController.PlayAtackPlayer();
 
             if (result == AttackAction.Kill)
