@@ -21,6 +21,7 @@ public class UIType : MonoBehaviour
     {
         Debug.Log("SetDisabled", this);
         foreach (var c in gameObject.GetComponentsInChildren<Image>()) c.enabled = false;
+        foreach (var t in gameObject.GetComponentsInChildren<Text>()) t.enabled = false;
         //        if (gameObject.GetComponent<Image>()) gameObject.GetComponent<Image>().enabled = false;
         //        if (gameObject.GetComponent<Slider>()) gameObject.GetComponent<Slider>().enabled = false;
     }
@@ -28,6 +29,7 @@ public class UIType : MonoBehaviour
     public void SetEnabled()
     {
         foreach (var c in gameObject.GetComponentsInChildren<Image>()) c.enabled = true;
+        foreach (var t in gameObject.GetComponentsInChildren<Text>()) t.enabled = true;
         //        if (gameObject.GetComponent<Image>()) gameObject.GetComponent<Image>().enabled = true;
         //        if (gameObject.GetComponent<Slider>()) gameObject.GetComponent<Slider>().enabled = true;
     }

@@ -41,7 +41,7 @@ public class SceneController : MonoBehaviour
         this.player_anim = this.player.GetComponent<Animator>();
         this.enemy_anim = this.enemy.GetComponent<Animator>();
 
-        this.bgImage.sprite = gameSystem.GetBattleRound().BackImage;
+        this.bgImage.sprite = gameSystem.GetRound().BackImage;
 
         SetPlayer(this.player_def);
         SetEnemy(this.enemy_def);
@@ -49,6 +49,15 @@ public class SceneController : MonoBehaviour
 
     public void SetShopStage(GameSystem gameSystem)
     {
+        this.player_def = gameSystem.Player.Normal;
+        this.player_atk = gameSystem.Player.Atack;
+
+        this.bgImage.sprite = gameSystem.GetRound().BackImage;
+
+        var sr = gameSystem.GetRound() as ShopRound;
+
+        SetPlayer(this.player_def);
+        SetEnemy(sr.GetShopImage());
     }
 
     /// <summary>

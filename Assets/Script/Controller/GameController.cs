@@ -37,26 +37,23 @@ public class GameController : MonoBehaviour
     
     IEnumerator StartThread()
     {
-        SetBattleFeild();
+        var stage = gameSystem.GetRound();
+        UIController.SetUI(gameSystem);
 
-        yield return SceneController.PlayRoundStart(UIController, gameSystem);
-
-        void SetBattleFeild()
+        switch (stage.Type)
         {
-            var stage = gameSystem.GetRound();
-            UIController.SetUI(gameSystem);
+            case StageType.battle:
+                SceneController.SetBattleStage(gameSystem);
+                StartCoroutine(BattleThread());
+                break;
 
-            switch (stage.Type)
-            {
-                case StageType.battle:
-                    SceneController.SetBattleStage(gameSystem);
-                    StartCoroutine(BattleThread());
-                    break;
-
-                case StageType.shop:
-                    break;
-            }
+            case StageType.shop:
+                SceneController.SetShopStage(gameSystem);
+                StartCoroutine(ShopThread());
+                break;
         }
+        //SetBattleFeild();
+        yield return SceneController.PlayRoundStart(UIController, gameSystem);
     }
 
     IEnumerator BattleThread()
@@ -138,6 +135,15 @@ public class GameController : MonoBehaviour
             gameSystem.NextStage();
             StartCoroutine(StartThread());
         }
+    }
+
+    IEnumerator ShopThread()
+    {
+        var sr = gameSystem.GetRound() as ShopRound;
+        var ms = $"「{sr.item.Name}」に ${sr.item.Price} で交換できる。";
+        yield return UIController.PlayMessage(ms);
+
+        yield break;
     }
 
     IEnumerator DeathThread()

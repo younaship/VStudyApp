@@ -86,19 +86,9 @@ public class DefaultStage : Stage
 
     public override Round GetRound(int index)
     {
-        if (index == 1) return new ButtleRound()
+        if (index == 0) return new ShopRound()
         {
-            Type = StageType.shop,
-            MinQuestionDifficulty = 1,
-            MaxQuestionDifficulty = 2,
-            Enemy = new Enemy()
-            {
-                Atk = 3,
-                AttackRate = 2.0f,
-                MaxHp = 20,
-                Hp = 20,
-                Normal = Resources.Load<Sprite>("enemy_normal")
-            },
+            item = new Weapon("BUKI", 100, 120, 5),
             BackImage = Resources.Load<Sprite>("bg_normal")
         };
 

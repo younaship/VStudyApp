@@ -32,6 +32,7 @@ public abstract class Stage //: IStage
 public class Round
 {
     public StageType Type;
+    public Sprite BackImage;
 }
 
 public class ButtleRound : Round
@@ -44,8 +45,6 @@ public class ButtleRound : Round
     public Enemy Enemy;
     public Item DropItem;
 
-    public Sprite BackImage;
-
     public int MinQuestionDifficulty;
     public int MaxQuestionDifficulty;
 }
@@ -56,6 +55,18 @@ public class ShopRound : Round
     {
         this.Type = StageType.shop;
     }
+    
+    public Item item;
+    public Sprite GetShopImage()
+    {
+        if(item is Weapon)
+            return Resources.Load<Sprite>("shop_w");
+        if(item is Armor)
+            return Resources.Load<Sprite>("shop_a");
+
+        return Resources.Load<Sprite>("");
+    }
+
 }
 
 public enum StageType

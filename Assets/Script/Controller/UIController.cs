@@ -15,11 +15,11 @@ public class UIController : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
     [SerializeField] Slider hpSlider, countSlider, enemyHpSlider;
-    [SerializeField] Button[] buttons;
+    [SerializeField] Button[] ansButtons, selButtons;
     [SerializeField] Text statusAtkText, statusMoneyText, statusHpText;
     [SerializeField] Text questionText, answerText, centerText, roundText;
 
-    [SerializeField] GameObject pre_ResultWindow;
+    [SerializeField] GameObject pre_ResultWindow, ansBtnField, selBtnField;
 
     Image HpSliderFillAria, EnemyHpSliderFillAria;
 
@@ -63,7 +63,7 @@ public class UIController : MonoBehaviour
                 break;
 
             case StageType.shop:
-                foreach (var ui in uis) ui.SetDisabled();//ui.ChangeTo(UIType.Type.InShop);
+                foreach (var ui in uis) ui.ChangeTo(UIType.Type.InShop);//ui.ChangeTo(UIType.Type.InShop);
                 break;
         }
     }
@@ -173,6 +173,18 @@ public class UIController : MonoBehaviour
         act?.Invoke();
     }
 
+    public IEnumerator PlayMessage(string message, Action callback = null, float time = .1f)
+    {
+        answerText.text = "";
+        questionText.text = "";
+        foreach (char c in message)
+        {
+            questionText.text += c;
+            yield return new WaitForSeconds(time);
+        }
+        callback?.Invoke();  
+    }
+
     public IEnumerator PlayCenterText(string message, float time = 1f, int opframe = 10)
     {
         centerText.text = message;
@@ -196,18 +208,38 @@ public class UIController : MonoBehaviour
     /// <param name="callback">Callback: Press Button Index</param>
     public Action GetOnPressAnswer(Action<int> callback)
     {
-        for (var i = 0; i < buttons.Length; i++) 
+        for (var i = 0; i < ansButtons.Length; i++) 
         {
             int n = i;
-            buttons[i].onClick.RemoveAllListeners();
-            buttons[i].onClick.AddListener(() => {
+            ansButtons[i].onClick.RemoveAllListeners();
+            ansButtons[i].onClick.AddListener(() => {
                 callback(n);
             });
         }
 
         Action act = () =>
         {
-            foreach (var b in buttons) b.onClick.RemoveAllListeners();
+            foreach (var b in ansButtons) b.onClick.RemoveAllListeners();
+        };
+
+        return act;
+    }
+
+    public Action GetOnPressSelect(Action<bool> callback)
+    {
+        for (var i = 0; i < selButtons.Length; i++)
+        {
+            int n = i;
+            ansButtons[i].onClick.RemoveAllListeners();
+            ansButtons[i].onClick.AddListener(() => {
+                if (n == 0) callback(true);
+                else callback(false);
+            });
+        }
+
+        Action act = () =>
+        {
+            foreach (var b in ansButtons) b.onClick.RemoveAllListeners();
         };
 
         return act;

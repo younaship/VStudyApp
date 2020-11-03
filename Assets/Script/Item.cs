@@ -17,11 +17,11 @@
     public abstract void DisposeEffect(People people);
 }
 
-public abstract class Weapon : Item
+public class Weapon : Item
 {
     float power;
 
-    public Weapon(string name, float power, float price, float amoPrice) : base(name)
+    public Weapon(string name, float price, float amoPrice, float power) : base(name)
     {
         this.power = power;
         this.Price = price;
@@ -39,7 +39,24 @@ public abstract class Weapon : Item
     }
 }
 
-public abstract class Armor : Item
+public class Armor : Item
 {
-    public Armor(string name) : base(name) { }
+    float defence;
+
+    public Armor(string name, float price, float amoPrice, float defence) : base(name)
+    {
+        this.defence = defence;
+        this.Price = price;
+        this.AmoPrice = amoPrice;
+    }
+
+    public override void ActiveEffect(People people)
+    {
+        people.Atk += defence;
+    }
+
+    public override void DisposeEffect(People people)
+    {
+        people.Atk -= defence;
+    }
 }
