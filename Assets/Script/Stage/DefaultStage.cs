@@ -99,6 +99,12 @@ public class DefaultStage : Stage
             BackImage = bgimage
         };
 
+        if (index == 0) return new ShopRound()
+        {
+            item = new Armor("あーまー１", 100, 80, 10),
+            BackImage = bgimage
+        };
+
         return new ButtleRound()
         {
             MinQuestionDifficulty = 1,
@@ -109,7 +115,7 @@ public class DefaultStage : Stage
                 AttackRate = 2.0f,
                 MaxHp = 20,
                 Hp = 20,
-                Normal = Resources.Load<Sprite>("enemy_normal")
+                Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 20))
             },
             BackImage = bgimage
         };

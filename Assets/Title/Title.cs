@@ -15,4 +15,9 @@ public class Title : MonoBehaviour
     {
         SceneLoader.LoadSceneAsync("Game");
     }
+
+    public void OnPushMulti()
+    {
+        SceneLoader.LoadSceneAsync("MLobby");
+    }
 }

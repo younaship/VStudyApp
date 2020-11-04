@@ -29,7 +29,7 @@ public class GameSystem
         Player.Hp = 35;
         Player.MaxHp = 35;
         Player.Atk = 100;
-        Player.Normal = Resources.Load<Sprite>("player_normal");
+        Player.Normal = Resources.Load<Sprite>("player_default");
         Player.Atack = Resources.Load<Sprite>("player_normal");
     }
 
