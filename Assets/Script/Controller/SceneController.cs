@@ -28,6 +28,12 @@ public class SceneController : MonoBehaviour
         cover.color = new Color(0, 0, 0, 1);
     }
 
+    public void Awake()
+    {
+        this.player_anim = this.player.GetComponent<Animator>();
+        this.enemy_anim = this.enemy.GetComponent<Animator>();
+    }
+
     /// <summary>
     /// 現在の戦闘ステージを用意します。
     /// </summary>
@@ -37,9 +43,6 @@ public class SceneController : MonoBehaviour
         this.player_atk = gameSystem.Player.Atack;
         this.enemy_def = gameSystem.GetBattleRound().Enemy.Normal;
         this.enemy_atk = gameSystem.GetBattleRound().Enemy.Atack;
-
-        this.player_anim = this.player.GetComponent<Animator>();
-        this.enemy_anim = this.enemy.GetComponent<Animator>();
 
         this.bgImage.sprite = gameSystem.GetRound().BackImage;
 
@@ -90,11 +93,11 @@ public class SceneController : MonoBehaviour
     /// <summary>
     /// ラウンド終了時(Clear)のアニメーションを行います。
     /// </summary>
-    public IEnumerator PlayRoundClear(UIController ui)
+    public IEnumerator PlayRoundClear(UIController ui, float waitTime = 1f)
     {
         StartCoroutine(PlayPlayerNext()); // out
 
-        yield return new WaitForSeconds(1.8f);
+        yield return new WaitForSeconds(waitTime);
 
         for (var i = 30; i >= 0; i--) // 1s . 16s
         {

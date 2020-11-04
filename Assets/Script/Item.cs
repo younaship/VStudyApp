@@ -1,4 +1,6 @@
-﻿public abstract class Item
+﻿using UnityEngine;
+
+public abstract class Item
 {
     public string Name { private set; get; }
     public float Price { protected set; get; }
@@ -15,6 +17,7 @@
     public abstract void ActiveEffect(People people);
 
     public abstract void DisposeEffect(People people);
+
 }
 
 public class Weapon : Item
@@ -30,11 +33,13 @@ public class Weapon : Item
 
     public override void ActiveEffect(People people)
     {
+        Debug.Log("Active"+Name);
         people.Atk += power;
     }
 
     public override void DisposeEffect(People people)
     {
+        Debug.Log("DiActive" + Name);
         people.Atk -= power;
     }
 }

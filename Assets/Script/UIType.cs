@@ -19,7 +19,6 @@ public class UIType : MonoBehaviour
 
     public void SetDisabled()
     {
-        Debug.Log("SetDisabled", this);
         foreach (var c in gameObject.GetComponentsInChildren<Image>()) c.enabled = false;
         foreach (var t in gameObject.GetComponentsInChildren<Text>()) t.enabled = false;
         //        if (gameObject.GetComponent<Image>()) gameObject.GetComponent<Image>().enabled = false;

@@ -74,6 +74,15 @@ public class GameSystem
         var max = GetBattleRound().MaxQuestionDifficulty;
         return QuestionSystem.GetQuestion(max); // 仮：最大
     }
+
+    /// <summary>
+    /// PlayerにItemをセットします。
+    /// </summary>
+    public Item SetItemToPlayer(Item item)
+    {
+        Player.SetItem(item);
+        return item;
+    }
 }
 
 [Serializable]

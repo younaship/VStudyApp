@@ -97,7 +97,7 @@ public class GameController : MonoBehaviour
             {
                 foreach (var e in events) e.Invoke();
                 UIController.SetHPEnemy(0, 1);
-                StartCoroutine(Next());
+                StartCoroutine(NextThread());
             }
         }
 
@@ -127,20 +127,26 @@ public class GameController : MonoBehaviour
             UIController.PlaySuccess(question);
             yield break;
         }
-
-        IEnumerator Next()
-        {
-            yield return SceneController.PlayRoundClear(UIController);
-
-            gameSystem.NextStage();
-            StartCoroutine(StartThread());
-        }
     }
 
     IEnumerator ShopThread()
     {
         var sr = gameSystem.GetRound() as ShopRound;
         var ms = $"「{sr.item.Name}」に ${sr.item.Price} で交換できる。";
+
+        Action dis = null;
+        dis = UIController.GetOnPressSelect((r) =>
+        {
+            var p = gameSystem.Player;
+            Debug.Log("Selected" + r);
+            if (r) {
+                gameSystem.SetItemToPlayer(sr.item);
+                UIController.SetUI(gameSystem);
+            }
+            dis?.Invoke();
+
+            StartCoroutine(NextThread(.7f));
+        });
         yield return UIController.PlayMessage(ms);
 
         yield break;
@@ -151,6 +157,13 @@ public class GameController : MonoBehaviour
         yield return SceneController.PlayDie();
         yield return SceneController.PlayContinue();
         StartCoroutine(ContinueThread());
+    }
+
+    IEnumerator NextThread(float waitTime = 1)
+    {
+        yield return SceneController.PlayRoundClear(UIController, waitTime);
+        gameSystem.NextStage();
+        StartCoroutine(StartThread());
     }
 
     IEnumerator ContinueThread()

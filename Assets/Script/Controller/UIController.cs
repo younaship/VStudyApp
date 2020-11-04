@@ -45,20 +45,18 @@ public class UIController : MonoBehaviour
         var stage = gameSystem.GetRound();
         var uis = this.canvas.GetComponentsInChildren<UIType>();
 
+        var p = gameSystem.Player;
+        this.SetHP(gameSystem.Player.Hp, gameSystem.Player.MaxHp);
+        this.SetRound(gameSystem.GameConfig.NowRoundIndex);
+        this.SetStatus(p.Atk, p.MaxHp, gameSystem.GameConfig.Money);
+
         this.Init();
 
         switch (stage.Type)
         {
             case StageType.battle:
-
                 var _stage = stage as ButtleRound;
-
                 foreach (var ui in uis) ui.ChangeTo(UIType.Type.InBattle);
-                var p = gameSystem.Player;
-                this.SetHP(gameSystem.Player.Hp, gameSystem.Player.MaxHp);
-                this.SetRound(gameSystem.GameConfig.NowRoundIndex);
-                this.SetStatus(p.Atk, p.MaxHp, gameSystem.GameConfig.Money);
-
                 this.SetHPEnemy(_stage.Enemy.Hp, _stage.Enemy.MaxHp);
                 break;
 
@@ -230,8 +228,8 @@ public class UIController : MonoBehaviour
         for (var i = 0; i < selButtons.Length; i++)
         {
             int n = i;
-            ansButtons[i].onClick.RemoveAllListeners();
-            ansButtons[i].onClick.AddListener(() => {
+            selButtons[i].onClick.RemoveAllListeners();
+            selButtons[i].onClick.AddListener(() => {
                 if (n == 0) callback(true);
                 else callback(false);
             });
@@ -239,7 +237,7 @@ public class UIController : MonoBehaviour
 
         Action act = () =>
         {
-            foreach (var b in ansButtons) b.onClick.RemoveAllListeners();
+            foreach (var b in selButtons) b.onClick.RemoveAllListeners();
         };
 
         return act;
