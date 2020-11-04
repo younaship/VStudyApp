@@ -125,6 +125,8 @@ public class GameController : MonoBehaviour
         {
             SceneController.PlayAtackPlayer();
             UIController.PlaySuccess(question);
+            yield return SceneController.PlayEnemyDie();
+
             yield break;
         }
     }
@@ -132,7 +134,17 @@ public class GameController : MonoBehaviour
     IEnumerator ShopThread()
     {
         var sr = gameSystem.GetRound() as ShopRound;
-        var ms = $"「{sr.item.Name}」に ${sr.item.Price} で交換できる。";
+        var ms = $"「{sr.item.Name}」が ${sr.item.Price} で購入できる。\n";
+        if (sr.item is Weapon) ms += "タイプ：武器\n" + "威力：" + (sr.item as Weapon).Power + "\n\n";
+
+        ms += "[現在の装備]\n武器： ";
+        ms += gameSystem.Player.Weapon is null ? "装備無し\n" : $"{gameSystem.Player.Weapon.Name}[{gameSystem.Player.Weapon.Power}]\n";
+        ms += "防具： ";
+        ms += gameSystem.Player.Armor is null ? "装備無し\n" : $"{gameSystem.Player.Armor.Name}[{gameSystem.Player.Armor.Defence}]\n";
+
+        ms += "\n購入しますか？";
+
+        var mc = StartCoroutine(UIController.PlayMessage(ms, null, .01f));
 
         Action dis = null;
         dis = UIController.GetOnPressSelect((r) =>
@@ -142,12 +154,15 @@ public class GameController : MonoBehaviour
             if (r) {
                 gameSystem.SetItemToPlayer(sr.item);
                 UIController.SetUI(gameSystem);
+
+                StopCoroutine(mc);
+                StartCoroutine(UIController.PlayMessage($"{sr.item.Name}を装着した。", null, .01f));
             }
             dis?.Invoke();
 
             StartCoroutine(NextThread(.7f));
         });
-        yield return UIController.PlayMessage(ms);
+        //yield return UIController.PlayMessage(ms, null, .01f);
 
         yield break;
     }

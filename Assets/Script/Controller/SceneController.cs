@@ -86,7 +86,7 @@ public class SceneController : MonoBehaviour
         }
 
         var stage = gameSystem.GetRound();
-        if (stage.Type == StageType.shop) yield return ui.PlayCenterText("ショップを見つけた");
+        if (stage.Type == StageType.shop) yield return ui.PlayCenterText("ショップを発見");
         else yield return ui.PlayCenterText($"Round {gameSystem.GameConfig.NowRoundIndex}");
     }
 
@@ -158,6 +158,12 @@ public class SceneController : MonoBehaviour
             yield return null;
         }
         player.transform.rotation = r;
+    }
+
+    public IEnumerator PlayEnemyDie()
+    {
+        yield return new WaitForSeconds(.3f);
+        this.enemy.gameObject.GetComponent<DeathPR>().Play();
     }
     
 }

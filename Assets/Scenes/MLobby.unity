@@ -394,9 +394,6 @@ GameObject:
   - component: {fileID: 557672646}
   - component: {fileID: 557672645}
   - component: {fileID: 557672644}
-  - component: {fileID: 557672643}
-  - component: {fileID: 557672642}
-  - component: {fileID: 557672641}
   - component: {fileID: 557672640}
   m_Layer: 0
   m_Name: EventSystem
@@ -414,75 +411,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 557672639}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e55ad596f00a0e4ca9ab122375889b4, type: 3}
+  m_Script: {fileID: 11500000, guid: c5a1d7254ad74694a916a13930d76406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIController: {fileID: 557672643}
-  SceneController: {fileID: 557672642}
-  QuestionController: {fileID: 557672641}
---- !u!114 &557672641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 557672639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 703c197742715ed449fd065012c4fe41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &557672642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 557672639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a07d43ef9f086b54ca83a1a952fa77ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cover: {fileID: 1791077930}
-  player: {fileID: 680591407}
-  enemy: {fileID: 0}
-  bgImage: {fileID: 1342240836}
---- !u!114 &557672643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 557672639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1f8d0d2af9562f4f8395eed11595d97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 432502017}
-  hpSlider: {fileID: 0}
-  countSlider: {fileID: 0}
-  enemyHpSlider: {fileID: 0}
-  ansButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  selButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  statusAtkText: {fileID: 0}
-  statusMoneyText: {fileID: 0}
-  statusHpText: {fileID: 0}
-  questionText: {fileID: 1255077783}
-  answerText: {fileID: 0}
-  centerText: {fileID: 0}
-  roundText: {fileID: 0}
-  pre_ResultWindow: {fileID: 6641058854728313041, guid: d7d23e06559bffa45b172147d8a68797,
-    type: 3}
-  ansBtnField: {fileID: 0}
-  selBtnField: {fileID: 0}
 --- !u!114 &557672644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -855,8 +786,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 1286e56310d101d41b14b6870d20c3c8, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

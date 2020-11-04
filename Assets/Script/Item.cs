@@ -18,15 +18,16 @@ public abstract class Item
 
     public abstract void DisposeEffect(People people);
 
+
 }
 
 public class Weapon : Item
 {
-    float power;
+    public float Power { private set; get; }
 
     public Weapon(string name, float price, float amoPrice, float power) : base(name)
     {
-        this.power = power;
+        this.Power = power;
         this.Price = price;
         this.AmoPrice = amoPrice;
     }
@@ -34,34 +35,34 @@ public class Weapon : Item
     public override void ActiveEffect(People people)
     {
         Debug.Log("Active"+Name);
-        people.Atk += power;
+        people.Atk += Power;
     }
 
     public override void DisposeEffect(People people)
     {
         Debug.Log("DiActive" + Name);
-        people.Atk -= power;
+        people.Atk -= Power;
     }
 }
 
 public class Armor : Item
 {
-    float defence;
+    public float Defence { private set; get; }
 
     public Armor(string name, float price, float amoPrice, float defence) : base(name)
     {
-        this.defence = defence;
+        this.Defence = defence;
         this.Price = price;
         this.AmoPrice = amoPrice;
     }
 
     public override void ActiveEffect(People people)
     {
-        people.Atk += defence;
+        people.Atk += Defence;
     }
 
     public override void DisposeEffect(People people)
     {
-        people.Atk -= defence;
+        people.Atk -= Defence;
     }
 }

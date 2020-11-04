@@ -86,10 +86,17 @@ public class DefaultStage : Stage
 
     public override Round GetRound(int index)
     {
-        if (index == 0) return new ShopRound()
+
+        Sprite bgimage;
+        if (index < 2) bgimage = Resources.Load<Sprite>("bg_normal");
+        else if (index < 4) bgimage = Resources.Load<Sprite>("bg_normal_e");
+        else if (index < 6) bgimage = Resources.Load<Sprite>("bg_normal_n");
+        else bgimage = Resources.Load<Sprite>("bg_normal");
+
+        if (index == 1) return new ShopRound()
         {
             item = new Weapon("BUKI", 100, 120, 5),
-            BackImage = Resources.Load<Sprite>("bg_normal")
+            BackImage = bgimage
         };
 
         return new ButtleRound()
@@ -104,7 +111,7 @@ public class DefaultStage : Stage
                 Hp = 20,
                 Normal = Resources.Load<Sprite>("enemy_normal")
             },
-            BackImage = Resources.Load<Sprite>("bg_normal")
+            BackImage = bgimage
         };
     }
 }
