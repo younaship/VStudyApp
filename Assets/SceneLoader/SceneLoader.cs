@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class SceneLoader : MonoBehaviour
 {
     public GameObject canvas_prefub;
+    public static List<object> Args;
 
     public void LoadSceneAsync(string name, Action<float> progressCallback = null, Action compliteCallback = null)
     {

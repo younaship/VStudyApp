@@ -100,7 +100,13 @@ public class DefaultStage : Stage
             BackImage = bgimage
         };
 
-        if (index == 0) return new ShopRound()
+        if (index == 5) return new ShopRound()
+        {
+            item = new Weapon("BUKI2", 1000, 1200, 50),
+            BackImage = bgimage
+        };
+
+        if (index == 3) return new ShopRound()
         {
             item = new Armor("あーまー１", 100, 80, 10),
             BackImage = bgimage

@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[Serializable]
 public abstract class Item
 {
-    public string Name { private set; get; }
-    public float Price { protected set; get; }
-    public float AmoPrice { protected set; get; }
+    public string Name;// { private set; get; }
+    public float Price;// { protected set; get; }
+    public float AmoPrice;// { protected set; get; }
 
     public Item(string name)
     {
@@ -21,9 +23,10 @@ public abstract class Item
 
 }
 
+[Serializable]
 public class Weapon : Item
 {
-    public float Power { private set; get; }
+    public float Power; //{ private set; get; }
 
     public Weapon(string name, float price, float amoPrice, float power) : base(name)
     {
@@ -45,9 +48,10 @@ public class Weapon : Item
     }
 }
 
+[Serializable]
 public class Armor : Item
 {
-    public float Defence { private set; get; }
+    public float Defence; //{ private set; get; }
 
     public Armor(string name, float price, float amoPrice, float defence) : base(name)
     {

@@ -6,8 +6,10 @@ using UnityEngine;
 [Serializable]
 public class Player : People
 {
-    public Armor Armor { get; private set; }
-    public Weapon Weapon { get; private set; }
+    [SerializeField] private Armor armor;
+    public Armor Armor { get { return armor; } private set { this.armor = value; } }
+    [SerializeField] private Weapon weapon;
+    public Weapon Weapon { get { return weapon; } private set { this.weapon = value; } }
 
     public void SetItem(Item item)
     {
@@ -24,5 +26,18 @@ public class Player : People
             this.Weapon.ActiveEffect(this);
         }
         else Debug.LogWarning("Not Match Type."+item.GetType());
+    }
+
+    public static Player Default
+    {
+        get
+        {
+            return new Player()
+            {
+                Hp = 35,
+                MaxHp = 35,
+                Atk = 100,
+            };
+        }
     }
 }

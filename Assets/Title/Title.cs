@@ -11,6 +11,11 @@ public class Title : MonoBehaviour
         this.SceneLoader = this.GetComponent<SceneLoader>();
     }
 
+    public void Start()
+    {
+        PlayerPrefs.DeleteAll(); // Debug
+    }
+
     public void OnPushSingle()
     {
         SceneLoader.LoadSceneAsync("Game");

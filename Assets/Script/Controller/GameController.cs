@@ -12,17 +12,28 @@ public class GameController : MonoBehaviour
     public QuestionController QuestionController;
 
     GameSystem gameSystem;
+    GameMode Mode;
 
     public void Awake()
     {
-        gameSystem = new GameSystem();
-        UIController.Init();
-        QuestionController.Init();
+        var mode = SceneLoader.Args is null ? null : SceneLoader.Args.Find((arg) => arg is GameMode) as GameMode;
+        if(mode is null || mode.Value == GameMode.Mode.Single)
+        {
+            Init();
+        }
+        else
+        {
+
+        }
     }
 
-    private void SyncValue()
+    void Init()
     {
-        
+
+        gameSystem = new GameSystem();
+        gameSystem.Init();
+        UIController.Init();
+        QuestionController.Init();
     }
 
     public void Start()
@@ -35,7 +46,7 @@ public class GameController : MonoBehaviour
 
     }
     
-    IEnumerator StartThread()
+    protected IEnumerator StartThread()
     {
         var stage = gameSystem.GetRound();
         UIController.SetUI(gameSystem);
@@ -56,7 +67,7 @@ public class GameController : MonoBehaviour
         yield return SceneController.PlayRoundStart(UIController, gameSystem);
     }
 
-    IEnumerator BattleThread()
+    protected IEnumerator BattleThread()
     {
         var question = gameSystem.GetQuestion();
         var events = new List<Action>();
@@ -131,7 +142,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    IEnumerator ShopThread()
+    protected IEnumerator ShopThread()
     {
         var sr = gameSystem.GetRound() as ShopRound;
         var ms = $"「{sr.item.Name}」が ${sr.item.Price} で購入できる。\n";
@@ -167,25 +178,39 @@ public class GameController : MonoBehaviour
         yield break;
     }
 
-    IEnumerator DeathThread()
+    protected IEnumerator DeathThread()
     {
         yield return SceneController.PlayDie();
         yield return SceneController.PlayContinue();
         StartCoroutine(ContinueThread());
     }
 
-    IEnumerator NextThread(float waitTime = 1)
+    protected IEnumerator NextThread(float waitTime = 1)
     {
         yield return SceneController.PlayRoundClear(UIController, waitTime);
-        gameSystem.NextStage();
-        StartCoroutine(StartThread());
+        if (gameSystem.NextStage()) StartCoroutine(StartThread());
+        else StartCoroutine(FinishThread());
     }
 
-    IEnumerator ContinueThread()
+    protected IEnumerator ContinueThread()
     {
         gameSystem.Continue();
         StartCoroutine(StartThread());
         yield break;
     }
 
+    protected IEnumerator FinishThread()
+    {
+        yield break;
+    }
+
+    public class GameMode
+    {
+        public GameMode(Mode mode) { this.Value = mode; }
+        public Mode Value { get; private set; }
+        public enum Mode
+        {
+            Single, Multi
+        }
+    }
 }
