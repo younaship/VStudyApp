@@ -11,12 +11,7 @@ public class GameSystem
 
     public GameConfig GameConfig { get; private set; }
 
-    public GameSystem()
-    {
-        Init();
-    }
-
-    private void Init()
+    public void Init()
     {
         QuestionSystem = new QuestionSystem();
         QuestionSystem.ReadFromCSV();
@@ -24,11 +19,12 @@ public class GameSystem
         this.LoadDataFromLocal();
         StageSystem = new StageSystem(this);
 
-        /* DEBUG */
+        /* DEBUG 
         Player = new Player();
         Player.Hp = 35;
         Player.MaxHp = 35;
         Player.Atk = 100;
+        */
         Player.Normal = Resources.Load<Sprite>("player_default");
         Player.Atack = Resources.Load<Sprite>("player_normal");
     }
@@ -38,13 +34,17 @@ public class GameSystem
         string json = PlayerPrefs.GetString("gameconfig", null);
         var data = String.IsNullOrEmpty(json) ? new GameConfig() : JsonUtility.FromJson<GameConfig>(json);
         GameConfig = data;
-        Player = data is null ? new Player() : data.Player is null ? new Player() : data.Player; 
+        Player = data is null ? Player.Default : data.Player is null ? Player.Default : data.Player;
+        Debug.Log("Load From Local: " + json);
     }
 
     public void SaveDataToLocal()
     {
+        GameConfig.Player = this.Player;
+
         var json = JsonUtility.ToJson(GameConfig);
         PlayerPrefs.SetString("gameconfig", json);
+        Debug.Log("Saved Data: " + json);
     }
 
     public Round GetRound()
@@ -63,9 +63,16 @@ public class GameSystem
         GameConfig.NowRoundIndex = 0;
     }
 
-    public void NextStage()
+    /// <summary>
+    /// 次のステージへ進みます。ret: 進めるか
+    /// </summary>
+    public bool NextStage()
     {
         this.GameConfig.NowRoundIndex++;
+        SaveDataToLocal();
+
+        if (GetRound() is null) return false;
+        return true;
     }
 
     public Question GetQuestion()
