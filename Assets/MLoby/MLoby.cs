@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Firebase.Database;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,21 @@ public class MLoby : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        FirebaseDatabase.DefaultInstance
+          .GetReference("test")
+          .GetValueAsync().ContinueWith(task => {
+              if (task.IsFaulted)
+              {
+              // Handle the error...
+          }
+              else if (task.IsCompleted)
+              {
+                  DataSnapshot snapshot = task.Result;
+                  Debug.Log(snapshot.Value);
+              // Do something with snapshot...
+          }
+          });
     }
 
     // Update is called once per frame

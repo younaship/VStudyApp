@@ -17,3 +17,8 @@ ExportedObj/
 *.pidb
 *.booproj
 *.svd
+
+
+# Firebase is More 100MB
+
+/Assets/Firebase/
