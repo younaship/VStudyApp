@@ -11,15 +11,19 @@ public class MLoby : MonoBehaviour
     [SerializeField] Button[] selButtons;
 
     SceneLoader SceneLoader;
+    FireConnection connection;
 
     public void Awake()
     {
         this.SceneLoader = this.GetComponent<SceneLoader>();
+        this.connection = new FireConnection();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        connection.JoinRoom("123", new FireConnection.Player());
+        /*
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
         FirebaseDatabase.DefaultInstance
           .GetReference("test")
@@ -35,6 +39,7 @@ public class MLoby : MonoBehaviour
               // Do something with snapshot...
           }
           });
+         */
     }
 
     // Update is called once per frame
