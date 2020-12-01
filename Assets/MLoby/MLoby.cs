@@ -22,7 +22,6 @@ public class MLoby : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        connection.JoinRoom("123", new FireConnection.Player());
         /*
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
         FirebaseDatabase.DefaultInstance
@@ -46,6 +45,11 @@ public class MLoby : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public async void PushJoin()
+    {
+        await connection.JoinRoom("xR123", new FireConnection.Player() { Id = "x123", Name = "xName", Data = "{data: null}" });
     }
 
     public void AddMessage(string msg)

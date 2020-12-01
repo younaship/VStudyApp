@@ -25,42 +25,52 @@ public class FireConnection
     public FireConnection()
     {
         this.reference = FirebaseDatabase.DefaultInstance.RootReference;
-        EventHandler += (o, e) => { Debug.Log("Event: " + e.EventType); };
+        this.reference.Database.GoOnline();
+        
+        EventHandler += (o, e) => { Debug.Log("FireEvent: " + e.EventType); };
     }
 
     public async Task<bool> JoinRoom(string roomId, Player player)
     {
+        Debug.Log("JoinRoom..." + roomId);
         var ref_ = reference.Child("rooms").Child(roomId);
         var snap = await ref_.GetValueAsync();
         if (!snap.Exists) return false;
         var json = snap.GetRawJsonValue();
 
         var val = GetFromJson(json, typeof(Room)) as Room;
+        Debug.Log(json);
         if (val is null || val.Status != RoomStatus.Opening || val.Players.Find((p)=>p.Id==player.Id) != null) return false; // ルームに問題がないかチェック
 
         this.room = val;
         this.roomId = roomId;
 
+        player.Data = null;
         await ref_.Child("Players").Child(player.Id).SetRawJsonValueAsync(GetFromObject(player)); //自身を参加
         this.room.Players.Add(player);
 
         AddEventListenner(ref_);
 
-        EventHandler<ValueChangedEventArgs> ev3 = (o, e) =>
+        EventHandler<ValueChangedEventArgs> ev3 = async (o, e) =>
         {
-            var v = e.Snapshot.Value;
-            if (!(v is int)) return;
-            var st = (RoomStatus)v;
+            int i;
+            if (!int.TryParse(e.Snapshot.Value.ToString(), out i)) return;
+            var st = (RoomStatus)i;
+
             switch (st)
             {
-                case RoomStatus.Running:
-                    EventHandler.Invoke(this, new FireEventArgs(FireEventType.StartSession));
-                    break;
                 case RoomStatus.Closed:
                     EventHandler.Invoke(this, new FireEventArgs(FireEventType.CompliteSession));
                     break;
                 case RoomStatus.Opening:
-                    if (this.room.Status == RoomStatus.Closed) EventHandler.Invoke(this, new FireEventArgs(FireEventType.ReadySessionAgain));
+                    if (this.room.Status == RoomStatus.Closed) // セッション再準備
+                    {
+                        await PushToData(null);
+                        EventHandler.Invoke(this, new FireEventArgs(FireEventType.ReadySessionAgain, this.room));
+                    }
+                    break;
+                case RoomStatus.Running:
+                    EventHandler.Invoke(this, new FireEventArgs(FireEventType.StartSession));
                     break;
                 case RoomStatus.Discard:
                     ExitRoom();
@@ -75,7 +85,17 @@ public class FireConnection
         EventHandler.Invoke(this, new FireEventArgs(FireEventType.Connected));
 
         this.player = player;
+        
         return true;
+    }
+
+    public async Task PushToData(string data)
+    {
+        if (this.player is null || this.roomId is null) return;
+
+        this.player.Data = data;
+        var ref_ = reference.Child("rooms").Child(roomId);
+        await ref_.Child("Players").Child(player.Id).SetRawJsonValueAsync(GetFromObject(this.player));
     }
 
     /// <summary>
@@ -109,11 +129,43 @@ public class FireConnection
     }
 
     /// <summary>
-    /// Host Only
+    /// Host Only セッションを開始します。
     /// </summary>
-    public void StartSession()
+    public async void StartSession(CanselTokenSource token, Action onComplite)
     {
-        //var c = Action
+        if (roomId is null) return;
+        var ref_ = reference.Child("rooms").Child(roomId);
+        
+        await ref_.Child("Status").SetValueAsync(RoomStatus.Running);
+        FireEventHandler ev = null;
+        ev = async (o, e) =>
+        {
+            if(e.EventType == FireEventType.ChangeUser)
+            {
+                if(this.room.Players.Find((p) => p is null) is null) // nullがnull(全てデータそろったら)
+                {
+                    EventHandler -= ev;
+                    await ref_.Child("Status").SetValueAsync(RoomStatus.Closed);
+                    onComplite?.Invoke();
+                }
+            }
+        };
+
+        EventHandler += ev;
+        token.SetCanselAct(async() => {
+            EventHandler -= ev;
+            await ref_.Child("Status").SetValueAsync(RoomStatus.Discard);
+        });
+    }
+
+    /// <summary>
+    /// Host Only セッションを再準備します。(部屋に参加可能になります。)
+    /// </summary>
+    public async Task ReadySession()
+    {
+        if (roomId is null) return;
+        var ref_ = reference.Child("rooms").Child(roomId);
+        await ref_.Child("Status").SetValueAsync(RoomStatus.Opening);
     }
 
     void AddEventListenner(DatabaseReference ref_) // ref_ is RoomRef
@@ -216,12 +268,6 @@ public class FireConnection
         Closed, Opening, Running, Discard
     }
 
-/*    public class Result
-    {
-        public string Id;
-        public string Data;
-    }
-*/
     public class Room
     {
         public RoomStatus Status;
@@ -254,7 +300,17 @@ public class FireConnection
 
     public class CanselTokenSource
     {
-        
+        Func<Task> canselAct;
+
+        public void SetCanselAct(Func<Task> action)
+        {
+            this.canselAct = action;
+        }
+
+        public void Cansel()
+        {
+            this.canselAct?.Invoke();
+        }
     }
 
     public delegate void FireEventHandler(object sender, FireEventArgs e);
