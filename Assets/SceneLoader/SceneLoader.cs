@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class SceneLoader : MonoBehaviour
 {
     public GameObject canvas_prefub;
-    public static List<object> Args;
+    public static List<object> Args = new List<object>();
 
     public void LoadSceneAsync(string name, Action<float> progressCallback = null, Action compliteCallback = null)
     {
@@ -47,5 +47,10 @@ public class SceneLoader : MonoBehaviour
             image.color = new Color(0, 0, 0, (i / 120f));
             yield return null;
         }
+    }
+
+    public static T GetArgs<T>() where T : class
+    {
+        return Args is null ? null : Args.Find((arg) => arg is T) as T;
     }
 }

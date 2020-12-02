@@ -15,4 +15,10 @@ public class Game : MonoBehaviour
     {
         SceneLoader.LoadSceneAsync("Title");
     }
+
+    public void GoMultiResult(MultiResult result)
+    {
+        SceneLoader.Args.Add(result);
+        this.SceneLoader.LoadSceneAsync("MLobby");
+    }
 }

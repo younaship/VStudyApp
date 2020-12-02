@@ -59,8 +59,9 @@ public class DefaultStage : Stage
         };
     }
 }
-*/
-/*
+
+
+    /*
 public class DefaultStage : Stage
 {
 
@@ -68,7 +69,6 @@ public class DefaultStage : Stage
 
     public DefaultStage(GameSystem gameSystem) : base(gameSystem)
     {
-        *//*
         this.stageInfo = new StageInfo()
         {
             MinQuestionDifficulty = 1,
@@ -82,9 +82,9 @@ public class DefaultStage : Stage
                 Normal = Resources.Load<Sprite>("enemy_normal")
             },
             BackImage = Resources.Load<Sprite>("bg_normal")
-        }; /* Debug */
-/*    }*/
-    /*
+        }; 
+    }
+    
     public override Round GetRound(int index)
     {
 

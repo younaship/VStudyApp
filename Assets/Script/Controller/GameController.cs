@@ -12,26 +12,21 @@ public class GameController : MonoBehaviour
     public QuestionController QuestionController;
 
     GameSystem gameSystem;
-    GameMode Mode;
+    GameMode Mode = new GameMode(GameMode.Mode.Single);
 
     public void Awake()
     {
-        var mode = SceneLoader.Args is null ? null : SceneLoader.Args.Find((arg) => arg is GameMode) as GameMode;
-        if(mode is null || mode.Value == GameMode.Mode.Single)
-        {
-            Init();
-        }
-        else
-        {
+        Init();
+        this.Mode = SceneLoader.GetArgs<GameMode>() ?? new GameMode(GameMode.Mode.Single);
 
-        }
+        gameSystem.Init(this.Mode);
+
+        Debug.Log("Awake GameController :" + this.Mode?.Value);
     }
 
     void Init()
     {
-
         gameSystem = new GameSystem();
-        gameSystem.Init();
         UIController.Init();
         QuestionController.Init();
     }
@@ -39,6 +34,7 @@ public class GameController : MonoBehaviour
     public void Start()
     {
         StartCoroutine(StartThread());
+        if (Mode?.Value == GameMode.Mode.Multi) StartCoroutine(MultiThread());
     }
 
     public void InitStage()
@@ -49,7 +45,7 @@ public class GameController : MonoBehaviour
     protected IEnumerator StartThread()
     {
         var stage = gameSystem.GetRound();
-        UIController.SetUI(gameSystem);
+        UIController.SetUI(gameSystem, this.Mode);
 
         switch (stage.Type)
         {
@@ -65,6 +61,25 @@ public class GameController : MonoBehaviour
         }
         //SetBattleFeild();
         yield return SceneController.PlayRoundStart(UIController, gameSystem);
+    }
+
+    protected IEnumerator MultiThread()
+    {
+        for(int i = 10; i > 0; i--)
+        {
+            Debug.Log("MultiThread");
+            UIController.SetRound(i.ToString());
+            yield return new WaitForSeconds(1f);
+        }
+
+        var result = new MultiResult()
+        {
+            Score = gameSystem.GameConfig.NowRoundIndex * 10 + 1 // Test
+        };
+
+        StopAllCoroutines();
+        this.transform.GetComponent<Game>().GoMultiResult(result);
+        
     }
 
     protected IEnumerator BattleThread()
@@ -164,7 +179,7 @@ public class GameController : MonoBehaviour
             Debug.Log("Selected" + r);
             if (r) {
                 gameSystem.SetItemToPlayer(sr.item);
-                UIController.SetUI(gameSystem);
+                UIController.SetUI(gameSystem, this.Mode);
 
                 StopCoroutine(mc);
                 StartCoroutine(UIController.PlayMessage($"{sr.item.Name}を装着した。", null, .01f));
@@ -188,7 +203,7 @@ public class GameController : MonoBehaviour
     protected IEnumerator NextThread(float waitTime = 1)
     {
         yield return SceneController.PlayRoundClear(UIController, waitTime);
-        if (gameSystem.NextStage()) StartCoroutine(StartThread());
+        if (gameSystem.NextStage(this.Mode)) StartCoroutine(StartThread());
         else StartCoroutine(FinishThread());
     }
 
@@ -202,15 +217,5 @@ public class GameController : MonoBehaviour
     protected IEnumerator FinishThread()
     {
         yield break;
-    }
-
-    public class GameMode
-    {
-        public GameMode(Mode mode) { this.Value = mode; }
-        public Mode Value { get; private set; }
-        public enum Mode
-        {
-            Single, Multi
-        }
     }
 }

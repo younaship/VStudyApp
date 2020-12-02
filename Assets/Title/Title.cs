@@ -18,11 +18,15 @@ public class Title : MonoBehaviour
 
     public void OnPushSingle()
     {
+        SceneLoader.Args.Clear();
+        SceneLoader.Args.Add(new GameMode(GameMode.Mode.Single));
         SceneLoader.LoadSceneAsync("Game");
     }
 
     public void OnPushMulti()
     {
+        SceneLoader.Args.Clear();
+        SceneLoader.Args.Add(new GameMode(GameMode.Mode.Multi));
         SceneLoader.LoadSceneAsync("MLobby");
     }
 }

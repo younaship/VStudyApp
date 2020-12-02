@@ -11,13 +11,14 @@ public class GameSystem
 
     public GameConfig GameConfig { get; private set; }
 
-    public void Init()
+    public void Init(GameMode mode)
     {
         QuestionSystem = new QuestionSystem();
         QuestionSystem.ReadFromCSV();
 
-        this.LoadDataFromLocal();
+        this.LoadDataFromLocal(mode);
         StageSystem = new StageSystem(this);
+        if (mode.Value == GameMode.Mode.Multi) StageSystem.SetCurrentStage(new MultiStage(this)); // マルチ用のステージへ
 
         /* DEBUG 
         Player = new Player();
@@ -29,17 +30,23 @@ public class GameSystem
         Player.Atack = Resources.Load<Sprite>("player_normal");
     }
 
-    public void LoadDataFromLocal()
+    public void LoadDataFromLocal(GameMode mode)
     {
         string json = PlayerPrefs.GetString("gameconfig", null);
         var data = String.IsNullOrEmpty(json) ? new GameConfig() : JsonUtility.FromJson<GameConfig>(json);
         GameConfig = data;
         Player = data is null ? Player.Default : data.Player is null ? Player.Default : data.Player;
+
+        if(mode.Value == GameMode.Mode.Multi) // マルチ用データ準備
+        {
+            GameConfig.NowRoundIndex = 0;
+        }
         Debug.Log("Load From Local: " + json);
     }
 
-    public void SaveDataToLocal()
+    public void SaveDataToLocal(GameMode mode)
     {
+        if (mode.Value == GameMode.Mode.Multi) return; // !! マルチ 保存拒否 (ストッパー)
         GameConfig.Player = this.Player;
 
         var json = JsonUtility.ToJson(GameConfig);
@@ -66,10 +73,10 @@ public class GameSystem
     /// <summary>
     /// 次のステージへ進みます。ret: 進めるか
     /// </summary>
-    public bool NextStage()
+    public bool NextStage(GameMode mode)
     {
         this.GameConfig.NowRoundIndex++;
-        SaveDataToLocal();
+        if(mode?.Value == GameMode.Mode.Single) SaveDataToLocal(mode);
 
         if (GetRound() is null) return false;
         return true;

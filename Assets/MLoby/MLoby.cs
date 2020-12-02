@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using MyConnection;
 
 public class MLoby : MonoBehaviour
 {
@@ -16,29 +17,13 @@ public class MLoby : MonoBehaviour
     public void Awake()
     {
         this.SceneLoader = this.GetComponent<SceneLoader>();
-        this.connection = new FireConnection();
+        this.connection = SceneLoader.GetArgs<FireConnection>() ?? new FireConnection();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        /*
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-        FirebaseDatabase.DefaultInstance
-          .GetReference("test")
-          .GetValueAsync().ContinueWith(task => {
-              if (task.IsFaulted)
-              {
-              // Handle the error...
-          }
-              else if (task.IsCompleted)
-              {
-                  DataSnapshot snapshot = task.Result;
-                  Debug.Log(snapshot.Value);
-              // Do something with snapshot...
-          }
-          });
-         */
+        if (SceneLoader.GetArgs<MultiResult>() != null) Debug.Log("Result... " + SceneLoader.GetArgs<MultiResult>().Score);
     }
 
     // Update is called once per frame
@@ -47,12 +32,23 @@ public class MLoby : MonoBehaviour
         
     }
 
-    public async void PushJoin()
+    public async void PushMakeRoom()
     {
-        await connection.JoinRoom("xR123", new FireConnection.Player() { Id = "x123", Name = "xName", Data = "{data: null}" });
+        await connection.CreateRoom(new MyConnection.Player() { Id= "z123", Name="zName"});
     }
 
-    public void AddMessage(string msg)
+    public async void PushJoin()
+    {
+        await connection.JoinRoom("xR123", new MyConnection.Player() { Id = "x123", Name = "xName"});
+    }
+
+    public void OnPushDebug()
+    {
+        SceneLoader.Args.Add(new GameMode(GameMode.Mode.Multi));
+        SceneLoader.LoadSceneAsync("Game");
+    }
+
+    void AddMessage(string msg)
     {
         messageText.text += msg + "\n";
     }

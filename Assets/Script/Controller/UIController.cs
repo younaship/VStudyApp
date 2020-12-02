@@ -40,14 +40,14 @@ public class UIController : MonoBehaviour
         answerText.text = "";
     }
 
-    public void SetUI(GameSystem gameSystem)
+    public void SetUI(GameSystem gameSystem, GameMode mode)
     {
         var stage = gameSystem.GetRound();
         var uis = this.canvas.GetComponentsInChildren<UIType>();
 
         var p = gameSystem.Player;
         this.SetHP(gameSystem.Player.Hp, gameSystem.Player.MaxHp);
-        this.SetRound(gameSystem.GameConfig.NowRoundIndex);
+        if (mode.Value == GameMode.Mode.Single) this.SetRound(gameSystem.GameConfig.NowRoundIndex.ToString());
         this.SetStatus(p.Atk, p.MaxHp, gameSystem.GameConfig.Money);
 
         this.Init();
@@ -73,7 +73,7 @@ public class UIController : MonoBehaviour
         countSlider.maxValue = max;
     }
 
-    public void SetRound(int round)
+    public void SetRound(string round)
     {
         roundText.text = $"{round}";
     }
