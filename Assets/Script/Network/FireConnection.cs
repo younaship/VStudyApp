@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace MyConnection
 {
@@ -47,6 +48,35 @@ namespace MyConnection
         public List<Player> Players;
     }
 
+    public class ExRoom : Room // :Room だとJson変換エラーが起きる
+    {
+        // public RoomStatus Status;
+        // public string RoomId; // DKey
+        // public string HostId;
+        // public object Players;
+        public Room ParseRoom(Player player)
+        {
+            return new Room()
+            {
+                HostId = this.HostId,
+                Players = new List<Player>() { player },
+                RoomId = this.RoomId,
+                Status = this.Status
+            };
+        }
+        public string GetJson(string playerId ,string playerJson)
+        {
+            playerJson = playerJson.Trim();
+            return "{\"HostId\":\"" + this.HostId + "\", \"RoomId\":\"" + this.RoomId + "\", \"Status\":" + ((int)this.Status) + ", \"Players\":{\""+playerId+"\":" + playerJson + "}}";
+        }
+    }
+
+    public class KVP<T,T2>
+    {
+        [DataMember(Name = "Key")]
+        public T Key;
+    }
+
     public class Player
     {
         public string Id; // DKey
@@ -79,6 +109,7 @@ namespace MyConnection
     public class FireConnection
     {
         public bool IsConnected { get { return (room is null) ? false : true; } }
+        public Room Room { get { return room; } }
 
         public event FireEventHandler EventHandler;
         Player player;
@@ -99,7 +130,9 @@ namespace MyConnection
 
         public async Task<bool> JoinRoom(string roomId, Player player)
         {
-            Debug.Log("JoinRoom..." + roomId);
+            if (this.IsConnected) return false;
+            isHost = false;
+            Debug.Log("Try JoinRoom..." + roomId);
             var ref_ = reference.Child("rooms").Child(roomId);
             var snap = await ref_.GetValueAsync();
             if (!snap.Exists) return false;
@@ -140,7 +173,7 @@ namespace MyConnection
                         EventHandler.Invoke(this, new FireEventArgs(FireEventType.StartSession));
                         break;
                     case RoomStatus.Discard:
-                        ExitRoom();
+                        await ExitRoom();
                         break;
                 }
 
@@ -170,20 +203,26 @@ namespace MyConnection
         /// </summary>
         public async Task<string> CreateRoom(Player player)
         {
+            if (IsConnected) return null;
             isHost = true;
-            string roomId = "sampleroom";
-            var myRoom = new Room()
+            string roomId = Guid.NewGuid().ToString("N").Substring(0, 5);
+            var myRoom = new ExRoom()
             {
                 HostId = player.Id,
-                Players = new List<Player>(),
+                Players = new List<Player>() { player },
                 RoomId = roomId,
                 Status = RoomStatus.Opening
             };
-            myRoom.Players.Add(player);
+
+            var json = myRoom.GetJson(player.Id ,GetFromObject(player));
+            //myRoom.Players.Add(player.Id, player);
+
+            Debug.Log(GetFromObject(player));
+            Debug.Log(json);
 
             var ref_ = reference.Child("rooms").Child(roomId);
-            await ref_.SetRawJsonValueAsync(GetFromObject(myRoom));
-            this.room = myRoom;
+            await ref_.SetRawJsonValueAsync(json); // GetFromObject(myRoom)
+            this.room = myRoom.ParseRoom(player);
             this.player = player;
             this.roomId = roomId;
 
@@ -242,10 +281,10 @@ namespace MyConnection
             {
                 var pl = GetFromJson(e.Snapshot.GetRawJsonValue(), typeof(Player)) as Player;
                 if (pl is null) return;
-            //var ps = from p in this.room.Players where !(p.Id is null) select p;
-            var ix = this.room.Players.FindIndex((p) => p.Id == pl.Id);
+                //var ps = from p in this.room.Players where !(p.Id is null) select p;
+                var ix = this.room.Players.FindIndex((p) => p.Id == pl.Id);
                 if (ix >= 0) this.room.Players.RemoveAt(ix); // IDを除外
-            EventHandler.Invoke(this, new FireEventArgs(FireEventType.BreakUser, pl));
+                EventHandler.Invoke(this, new FireEventArgs(FireEventType.BreakUser, pl));
             };
             ref_.Child("Players").ChildRemoved += ev;
             onDisconnect += () => ref_.Child("Players").ChildRemoved -= ev;
@@ -254,8 +293,9 @@ namespace MyConnection
             {
                 var pl = GetFromJson(e.Snapshot.GetRawJsonValue(), typeof(Player)) as Player;
                 if (pl is null) return;
-                this.room.Players.Add(pl); // IDを追加
-            EventHandler.Invoke(this, new FireEventArgs(FireEventType.JoinUser, pl));
+                if (this.room.Players.Find((p) => p.Id == pl.Id) is null) this.room.Players.Add(pl); // 見つけなければ(自身じゃなければ) IDを追加
+                EventHandler.Invoke(this, new FireEventArgs(FireEventType.JoinUser, pl));
+                Debug.Log("Join" + pl.Name);
             };
             ref_.Child("Players").ChildAdded += ev2;
             onDisconnect += () => ref_.Child("Players").ChildAdded -= ev2;
@@ -275,22 +315,25 @@ namespace MyConnection
         /// <summary>
         /// 終了処理を行います。
         /// </summary>
-        public async void ExitRoom()
+        public async Task ExitRoom()
         {
             if (room != null)
             {
                 if (this.isHost)
                     await reference.Child("rooms").Child(this.roomId).RemoveValueAsync();
-                else await reference.Child("rooms").Child(this.roomId).Child(this.player.Id).RemoveValueAsync();
+                else await reference.Child("rooms").Child(this.roomId).Child("Players").Child(this.player.Id).RemoveValueAsync();
+
+                Debug.Log(this.isHost+" "+this.roomId + "/" + this.player.Id);
             }
             Disconnect();
         }
 
         void Disconnect()
         {
-            onDisconnect.Invoke();
+            onDisconnect?.Invoke();
             onDisconnect = null;
             this.room = null;
+            this.isHost = false;
 
             EventHandler.Invoke(this, new FireEventArgs(FireEventType.Disconnected));
         }
@@ -312,7 +355,7 @@ namespace MyConnection
             using (MemoryStream ms = new MemoryStream())
             {
                 dc.WriteObject(ms, obj);
-                json = Encoding.UTF8.GetString(ms.GetBuffer());
+                json = Encoding.UTF8.GetString(ms.ToArray()); // GetBytes はバグる（笑）
             }
             return json;
         }
