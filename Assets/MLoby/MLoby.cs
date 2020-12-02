@@ -93,7 +93,7 @@ public class MLoby : MonoBehaviour
     {
         isBusy = true;
         var result = (!connection.IsConnected) ? await connection.CreateRoom(new MyConnection.Player() { Id= uid, Name=uName }) : null;
-        if (result != null) AddMessage("部屋を作成しました。"+result);
+        if (result != null) AddMessage($"ルーム「{result}」を作成しました。");
 
         GetOnPressSelect(new string[] { "部屋を閉じる", "このメンバーではじめる" }, async(r) =>
         {
@@ -136,22 +136,22 @@ public class MLoby : MonoBehaviour
                 clientEvents = ev;
                 connection.EventHandler += ev;
                 AddMessage("ルームに参加しました。");
+
+                GetOnPressSelect(new string[] { "部屋を抜ける", "" }, async (r2) =>
+                {
+                    if (r2)
+                    {
+                        if (isBusy) return;
+                        isBusy = true;
+                        connection.EventHandler -= clientEvents;
+                        await connection.ExitRoom();
+                        Init();
+                        isBusy = false;
+                    }
+                });
             }
             else AddMessage("参加出来ませんでした...");
             isBusy = false;
-
-            GetOnPressSelect(new string[] { "部屋を抜ける", "" }, async (r2) =>
-            {
-                if (r2)
-                {
-                    if (isBusy) return;
-                    isBusy = true;
-                    connection.EventHandler -= clientEvents;
-                    await connection.ExitRoom();
-                    Init();
-                    isBusy = false;
-                }
-            });
             
         });
         //await connection.JoinRoom("xR123", new MyConnection.Player() { Id = "x123", Name = "xName"});

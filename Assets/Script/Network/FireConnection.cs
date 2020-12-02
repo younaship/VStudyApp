@@ -50,10 +50,6 @@ namespace MyConnection
 
     public class ExRoom : Room // :Room ‚¾‚ÆJson•ÏŠ·ƒGƒ‰[‚ª‹N‚«‚é
     {
-        // public RoomStatus Status;
-        // public string RoomId; // DKey
-        // public string HostId;
-        // public object Players;
         public Room ParseRoom(Player player)
         {
             return new Room()
@@ -71,7 +67,7 @@ namespace MyConnection
         }
     }
 
-    public class KVP<T,T2>
+    public class KVP<T,T2> // Not Use
     {
         [DataMember(Name = "Key")]
         public T Key;
