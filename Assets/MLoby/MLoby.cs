@@ -132,6 +132,11 @@ public class MLoby : MonoBehaviour
                     {
                         StartGame();
                     }
+                    if(e.EventType == FireEventType.Discard)
+                    {
+                        Debug.Log("Discard FireConnection...");
+                        Init();
+                    }
                 };
                 clientEvents = ev;
                 connection.EventHandler += ev;
@@ -154,7 +159,6 @@ public class MLoby : MonoBehaviour
             isBusy = false;
             
         });
-        //await connection.JoinRoom("xR123", new MyConnection.Player() { Id = "x123", Name = "xName"});
     }
 
     public void OnPushDebug()
@@ -165,6 +169,8 @@ public class MLoby : MonoBehaviour
 
     void StartGame()
     {
+        SceneLoader.Args.Clear();
+        SceneLoader.Args.Add(this.connection);
         SceneLoader.Args.Add(new GameMode(GameMode.Mode.Multi));
         SceneLoader.LoadSceneAsync("Game");
     }

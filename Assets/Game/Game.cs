@@ -19,6 +19,6 @@ public class Game : MonoBehaviour
     public void GoMultiResult(MultiResult result)
     {
         SceneLoader.Args.Add(result);
-        this.SceneLoader.LoadSceneAsync("MLobby");
+        this.SceneLoader.LoadSceneAsync("Result");
     }
 }

@@ -15,7 +15,8 @@ namespace MyConnection
 
     public enum FireEventType
     {
-        Connected, Disconnected, JoinUser, BreakUser, ChangeUser, StartSession, CompliteSession, ReadySessionAgain
+        Connected, Disconnected, JoinUser, BreakUser, ChangeUser, StartSession, CompliteSession, ReadySessionAgain,
+        Discard = 99
     }
 
     public class FireEventArgs
@@ -37,7 +38,10 @@ namespace MyConnection
 
     public enum RoomStatus
     {
-        Closed, Opening, Running, Discard
+        Closed, // Battle Complite 
+        Opening, // Waiting Room
+        Running, // Battle Running
+        Discard // Battle Aborted
     }
 
     public class Room
@@ -156,11 +160,12 @@ namespace MyConnection
                 switch (st)
                 {
                     case RoomStatus.Closed:
-                        EventHandler.Invoke(this, new FireEventArgs(FireEventType.CompliteSession));
+                        if (this.room.Status == RoomStatus.Running) // Run => Close の時
+                            EventHandler.Invoke(this, new FireEventArgs(FireEventType.CompliteSession));
                         break;
                     case RoomStatus.Opening:
                         if (this.room.Status == RoomStatus.Closed) // セッション再準備
-                    {
+                        {
                             await PushToData(null);
                             EventHandler.Invoke(this, new FireEventArgs(FireEventType.ReadySessionAgain, this.room));
                         }
@@ -238,17 +243,19 @@ namespace MyConnection
             if (roomId is null) return;
             var ref_ = reference.Child("rooms").Child(roomId);
 
-            await ref_.Child("Status").SetValueAsync(RoomStatus.Running);
+            await ref_.Child("Status").SetValueAsync((int)RoomStatus.Running);
             FireEventHandler ev = null;
             ev = async (o, e) =>
             {
                 if (e.EventType == FireEventType.ChangeUser)
                 {
-                    if (this.room.Players.Find((p) => p is null) is null) // nullがnull(全てデータそろったら)
-                {
+                    if (this.room.Players.Find((p) => p.Data is null) is null) // nullがnull(全てデータそろったら)
+                    {
                         EventHandler -= ev;
-                        await ref_.Child("Status").SetValueAsync(RoomStatus.Closed);
+                        await ref_.Child("Status").SetValueAsync((int)RoomStatus.Closed);
                         onComplite?.Invoke();
+
+                        EventHandler.Invoke(this, new FireEventArgs(FireEventType.CompliteSession));
                     }
                 }
             };
@@ -257,7 +264,7 @@ namespace MyConnection
             token.SetCanselAct(async () =>
             {
                 EventHandler -= ev;
-                await ref_.Child("Status").SetValueAsync(RoomStatus.Discard);
+                await ref_.Child("Status").SetValueAsync((int)RoomStatus.Discard);
             });
         }
 
@@ -273,7 +280,15 @@ namespace MyConnection
 
         void AddEventListenner(DatabaseReference ref_) // ref_ is RoomRef
         {
-            EventHandler<ChildChangedEventArgs> ev = (o, e) =>
+            EventHandler<ChildChangedEventArgs> ev0 = (o, e) =>
+            {
+                EventHandler.Invoke(this, new FireEventArgs(FireEventType.Discard));
+                Disconnect();
+            };
+            ref_.ChildRemoved += ev0;
+            onDisconnect += () => ref_.ChildRemoved -= ev0;
+
+            EventHandler<ChildChangedEventArgs> ev1 = (o, e) =>
             {
                 var pl = GetFromJson(e.Snapshot.GetRawJsonValue(), typeof(Player)) as Player;
                 if (pl is null) return;
@@ -282,8 +297,8 @@ namespace MyConnection
                 if (ix >= 0) this.room.Players.RemoveAt(ix); // IDを除外
                 EventHandler.Invoke(this, new FireEventArgs(FireEventType.BreakUser, pl));
             };
-            ref_.Child("Players").ChildRemoved += ev;
-            onDisconnect += () => ref_.Child("Players").ChildRemoved -= ev;
+            ref_.Child("Players").ChildRemoved += ev1;
+            onDisconnect += () => ref_.Child("Players").ChildRemoved -= ev1;
 
             EventHandler<ChildChangedEventArgs> ev2 = (o, e) =>
             {
@@ -316,7 +331,10 @@ namespace MyConnection
             if (room != null)
             {
                 if (this.isHost)
+                {
+                    //await reference.Child("rooms").Child(this.roomId).Child("Status").SetValueAsync((int)RoomStatus.Discard);
                     await reference.Child("rooms").Child(this.roomId).RemoveValueAsync();
+                }
                 else await reference.Child("rooms").Child(this.roomId).Child("Players").Child(this.player.Id).RemoveValueAsync();
 
                 Debug.Log(this.isHost+" "+this.roomId + "/" + this.player.Id);

@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
 
     protected IEnumerator MultiThread()
     {
-        for(int i = 90; i > 0; i--)
+        for(int i = 5; i > 0; i--)
         {
             UIController.SetRound(i.ToString());
             yield return new WaitForSeconds(1f);
