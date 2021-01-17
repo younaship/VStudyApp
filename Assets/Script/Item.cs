@@ -8,6 +8,14 @@ public abstract class Item
     public int Price;// { protected set; get; }
     public float AmoPrice;// { protected set; get; }
 
+    public string SpritePath;
+    public Sprite Sprite {
+        get {
+            var sp = Resources.Load<Sprite>(this.SpritePath);
+            return sp ?? Resources.Load<Sprite>("null"); // 空イメージ
+        }
+    }
+
     public Item(string name)
     {
         this.Name = name;
@@ -48,11 +56,12 @@ public class Weapon : Item
 {
     public float Power; //{ private set; get; }
 
-    public Weapon(string name, int price, float amoPrice, float power) : base(name)
+    public Weapon(string name, int price, float amoPrice, float power, string spritePath) : base(name)
     {
         this.Power = power;
         this.Price = price;
         this.AmoPrice = amoPrice;
+        this.SpritePath = spritePath;
     }
 
     public override void ActiveEffect(People people)
@@ -73,11 +82,12 @@ public class Armor : Item
 {
     public float Defence; //{ private set; get; }
 
-    public Armor(string name, int price, float amoPrice, float defence) : base(name)
+    public Armor(string name, int price, float amoPrice, float defence, string spritePath) : base(name)
     {
         this.Defence = defence;
         this.Price = price;
         this.AmoPrice = amoPrice;
+        this.SpritePath = spritePath;
     }
 
     public override void ActiveEffect(People people)

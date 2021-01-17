@@ -101,7 +101,7 @@ public class HegiStage : Stage
             {
                 return new ShopRound()
                 {
-                    item = new Weapon("HegiTestWep", 100, 120 + plus / 120, 5 + plus / 5),
+                    Item = new Weapon("HegiTestWep", 100, 120 + plus / 120, 5 + plus / 5, "weapone/W_2"),
                     BackImage = bgimage
                 };
             }
@@ -109,7 +109,7 @@ public class HegiStage : Stage
             {
                 return new ShopRound()
                 {
-                    item = new Armor("HegiTestArm", 100, 80 + plus / 80, 10 + plus / 10),
+                    Item = new Armor("HegiTestArm", 100, 80 + plus / 80, 10 + plus / 10, "weapone/W_2"),
                     BackImage = bgimage
                 };
             }

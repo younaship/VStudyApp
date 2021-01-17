@@ -56,12 +56,12 @@ public class ShopRound : Round
         this.Type = StageType.shop;
     }
     
-    public Item item;
+    public Item Item;
     public Sprite GetShopImage()
     {
-        if(item is Weapon)
+        if(Item is Weapon)
             return Resources.Load<Sprite>("shop_w");
-        if(item is Armor)
+        if(Item is Armor)
             return Resources.Load<Sprite>("shop_a");
 
         return Resources.Load<Sprite>("");

@@ -167,8 +167,8 @@ public class GameController : MonoBehaviour
     protected IEnumerator ShopThread()
     {
         var sr = gameSystem.GetRound() as ShopRound;
-        var ms = $"「{sr.item.Name}」が ${sr.item.Price} で購入できる。\n";
-        if (sr.item is Weapon) ms += "タイプ：武器\n" + "威力：" + (sr.item as Weapon).Power + "\n\n";
+        var ms = $"「{sr.Item.Name}」が ${sr.Item.Price} で購入できる。\n";
+        if (sr.Item is Weapon) ms += "タイプ：武器\n" + "威力：" + (sr.Item as Weapon).Power + "\n\n";
 
         ms += "[現在の装備]\n武器： ";
         ms += gameSystem.Player.Weapon is null ? "装備無し\n" : $"{gameSystem.Player.Weapon.Name}[{gameSystem.Player.Weapon.Power}]\n";
@@ -184,14 +184,14 @@ public class GameController : MonoBehaviour
         {
             var p = gameSystem.Player;
             if (r) { // 購入アクション
-                if(gameSystem.GameConfig.Money >= sr.item.Price)
+                if(gameSystem.GameConfig.Money >= sr.Item.Price)
                 {
-                    gameSystem.GameConfig.Money -= sr.item.Price;
-                    gameSystem.SetItemToPlayer(sr.item);
+                    gameSystem.GameConfig.Money -= sr.Item.Price;
+                    gameSystem.SetItemToPlayer(sr.Item);
                     UIController.SetUI(gameSystem, this.Mode);
 
                     StopCoroutine(mc);
-                    StartCoroutine(UIController.PlayMessage($"{sr.item.Name}を装着した。", null, .01f));
+                    StartCoroutine(UIController.PlayMessage($"{sr.Item.Name}を装着した。", null, .01f));
 
                     this.gameSystem.SaveDataToLocal(this.Mode);
                 }

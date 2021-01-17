@@ -29,6 +29,18 @@ public class SampleStage : Stage
 
         Sprite bgimage = Resources.Load<Sprite>("bg_normal");
 
+        if (index == 1) return new ShopRound()
+        {
+            BackImage = bgimage,
+            Item = new Weapon("BUKI", 50, 50, 10, "weapon/W_2")
+        };
+
+        if (index == 3) return new ShopRound()
+        {
+            BackImage = bgimage,
+            Item = new Weapon("BUKI 2", 100, 100, 20, "weapon/W_3")
+        };
+
         return new ButtleRound()
         {
             MinQuestionDifficulty = 1,
@@ -37,8 +49,8 @@ public class SampleStage : Stage
             DropItem = new Money(100),
             Enemy = new Enemy()
             {
-                Atk = 3,
-                AttackRate = 1.0f,
+                Atk = 1,
+                AttackRate = 10.0f,
                 MaxHp = 20,
                 Hp = 20,
                 Normal = Resources.Load<Sprite>("enemy_normal")

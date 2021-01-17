@@ -7,11 +7,11 @@ using UnityEngine.UI;
 public class SceneController : MonoBehaviour
 {
     [SerializeField] Image cover;
-    [SerializeField] Image player, enemy;
+    [SerializeField] Image player, enemy, player_weapon, player_armor;
     [SerializeField] Image bgImage;
 
     Sprite player_def, player_atk, enemy_def, enemy_atk;
-    Animator player_anim, enemy_anim;
+    [SerializeField] Animator player_anim, enemy_anim;
 
     void SetPlayer(Sprite sprite)
     {
@@ -30,8 +30,8 @@ public class SceneController : MonoBehaviour
 
     public void Awake()
     {
-        this.player_anim = this.player.GetComponent<Animator>();
-        this.enemy_anim = this.enemy.GetComponent<Animator>();
+        //this.player_anim = this.player.GetComponent<Animator>();
+        //this.enemy_anim = this.enemy.GetComponent<Animator>();
     }
 
     /// <summary>
@@ -43,6 +43,9 @@ public class SceneController : MonoBehaviour
         this.player_atk = gameSystem.Player.Atack;
         this.enemy_def = gameSystem.GetBattleRound().Enemy.Normal;
         this.enemy_atk = gameSystem.GetBattleRound().Enemy.Atack;
+
+        if(gameSystem.Player.Armor != null) this.player_armor.sprite = gameSystem.Player.Armor.Sprite;
+        if (gameSystem.Player.Weapon != null) this.player_weapon.sprite = gameSystem.Player.Weapon.Sprite;
 
         this.bgImage.sprite = gameSystem.GetRound().BackImage;
 
