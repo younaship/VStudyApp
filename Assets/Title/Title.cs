@@ -8,6 +8,7 @@ public class Title : MonoBehaviour
 
     public void Awake()
     {
+        Application.targetFrameRate = 60;
         this.SceneLoader = this.GetComponent<SceneLoader>();
     }
 

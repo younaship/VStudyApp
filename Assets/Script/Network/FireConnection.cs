@@ -122,8 +122,20 @@ namespace MyConnection
 
         public FireConnection()
         {
+            Firebase.AppOptions conf = new Firebase.AppOptions()
+            {
+                ProjectId = "v-studyapp",
+                ApiKey = "AIzaSyAbM9NpOkMrPpO1G32Geb631RuRu2tn914",
+                AppId = "1:700834168529:android:f15c31c180037f43f5cff0", // Android
+                DatabaseUrl = new Uri("https://v-studyapp.firebaseio.com/")
+            };
+            //var conf = Firebase.AppOptions.LoadFromJsonConfig(@"C:\Users\user\Desktop\StreamingAssets\google-services.json");
+            var app = Firebase.FirebaseApp.Create(conf); 
             this.reference = FirebaseDatabase.DefaultInstance.RootReference;
-            this.reference.Database.GoOnline();
+//            var path = Application.dataPath + "/StreamingAssets";
+//            var app = FirebaseDatabase.DefaultInstance.
+//            this.reference = app.;
+//            this.reference.Database.GoOnline();
 
             EventHandler += (o, e) => { Debug.Log("FireEvent: " + e.EventType); };
         }

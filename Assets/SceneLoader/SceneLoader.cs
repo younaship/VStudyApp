@@ -40,11 +40,12 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator Thread(GameObject canvas)
     {
+        float SPEED = 30f;
         Image image = canvas.transform.GetChild(0).GetComponent<Image>();
         image.color = new Color(0, 0, 0, 0);
-        for (int i = 0; i < 120; i++)
+        for (int i = 0; i < SPEED; i++)
         {
-            image.color = new Color(0, 0, 0, (i / 120f));
+            image.color = new Color(0, 0, 0, (i / SPEED));
             yield return null;
         }
     }
