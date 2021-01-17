@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id" xmlns:tools="http://schemas.android.com/tools">
+  <string name="firebase_database_url" translatable="false">https://v-studyapp.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">700834168529</string>
+  <string name="google_storage_bucket" translatable="false">v-studyapp.appspot.com</string>
+  <string name="project_id" translatable="false">v-studyapp</string>
+  <string name="google_api_key" translatable="false">AIzaSyAbM9NpOkMrPpO1G32Geb631RuRu2tn914</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAbM9NpOkMrPpO1G32Geb631RuRu2tn914</string>
+  <string name="google_app_id" translatable="false">1:700834168529:android:f15c31c180037f43f5cff0</string>
+  <string name="default_web_client_id" translatable="false">700834168529-mub3pc1t59bco1inc56hi6dl43pep8h9.apps.googleusercontent.com</string>
+</resources>

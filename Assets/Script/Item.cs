@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Item
 {
     public string Name;// { private set; get; }
-    public float Price;// { protected set; get; }
+    public int Price;// { protected set; get; }
     public float AmoPrice;// { protected set; get; }
 
     public Item(string name)
@@ -23,12 +23,32 @@ public abstract class Item
 
 }
 
+public class Money : Item
+{
+    
+    public Money(int value, string name = "Money") : base(name)
+    {
+        this.Name = name;
+        this.Price = value;
+    }
+
+    public override void ActiveEffect(People people)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void DisposeEffect(People people)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 [Serializable]
 public class Weapon : Item
 {
     public float Power; //{ private set; get; }
 
-    public Weapon(string name, float price, float amoPrice, float power) : base(name)
+    public Weapon(string name, int price, float amoPrice, float power) : base(name)
     {
         this.Power = power;
         this.Price = price;
@@ -53,7 +73,7 @@ public class Armor : Item
 {
     public float Defence; //{ private set; get; }
 
-    public Armor(string name, float price, float amoPrice, float defence) : base(name)
+    public Armor(string name, int price, float amoPrice, float defence) : base(name)
     {
         this.Defence = defence;
         this.Price = price;

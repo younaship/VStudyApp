@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "700834168529",
+    "firebase_url": "https://v-studyapp.firebaseio.com",
+    "project_id": "v-studyapp",
+    "storage_bucket": "v-studyapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700834168529:android:f15c31c180037f43f5cff0",
+        "android_client_info": {
+          "package_name": "com.fulllab.vstudyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700834168529-mub3pc1t59bco1inc56hi6dl43pep8h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbM9NpOkMrPpO1G32Geb631RuRu2tn914"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700834168529-mub3pc1t59bco1inc56hi6dl43pep8h9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

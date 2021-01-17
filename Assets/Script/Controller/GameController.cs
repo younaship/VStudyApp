@@ -85,10 +85,12 @@ public class GameController : MonoBehaviour
     {
         var question = gameSystem.GetQuestion();
         var events = new List<Action>();
-        events.Add(UIController.AddSetHpListener(() => gameSystem.Player.Hp));
-        events.Add(UIController.AddSetHpListener(() => gameSystem.GetBattleRound().Enemy.Hp, false));
+        var round = gameSystem.GetRound() as ButtleRound;
 
-        events.Add(UIController.StartCountDown(gameSystem.GetBattleRound().Enemy.AttackRate, () => {
+        events.Add(UIController.AddSetHpListener(() => gameSystem.Player.Hp));
+        events.Add(UIController.AddSetHpListener(() => round.Enemy.Hp, false));
+
+        events.Add(UIController.StartCountDown(round.Enemy.AttackRate, () => {
             ReciveDamage();
         }, true));
         events.Add(UIController.StartQuestion(question));
@@ -101,7 +103,7 @@ public class GameController : MonoBehaviour
 
         void ReciveDamage()
         {
-            var damage = gameSystem.GetBattleRound().Enemy.Atk;
+            var damage = round.Enemy.Atk;
             var result = gameSystem.Player.AttackToMe(damage);
             SceneController.PlayAtackEnemy();
             
@@ -118,9 +120,15 @@ public class GameController : MonoBehaviour
             var result = gameSystem.GetBattleRound().Enemy.AttackToMe(damage);
             SceneController.PlayAtackPlayer();
 
-            if (result == AttackAction.Kill)
+            if (result == AttackAction.Kill) // 倒した
             {
                 foreach (var e in events) e.Invoke();
+                if (round.DropItem != null) { // ドロップアイテムあり
+                    if(round.DropItem is Money)
+                    {
+                        gameSystem.GameConfig.Money += round.DropItem.Price;
+                    }
+                }
                 UIController.SetHPEnemy(0, 1);
                 StartCoroutine(NextThread());
             }
@@ -175,13 +183,24 @@ public class GameController : MonoBehaviour
         dis = UIController.GetOnPressSelect((r) =>
         {
             var p = gameSystem.Player;
-            Debug.Log("Selected" + r);
-            if (r) {
-                gameSystem.SetItemToPlayer(sr.item);
-                UIController.SetUI(gameSystem, this.Mode);
+            if (r) { // 購入アクション
+                if(gameSystem.GameConfig.Money >= sr.item.Price)
+                {
+                    gameSystem.GameConfig.Money -= sr.item.Price;
+                    gameSystem.SetItemToPlayer(sr.item);
+                    UIController.SetUI(gameSystem, this.Mode);
 
-                StopCoroutine(mc);
-                StartCoroutine(UIController.PlayMessage($"{sr.item.Name}を装着した。", null, .01f));
+                    StopCoroutine(mc);
+                    StartCoroutine(UIController.PlayMessage($"{sr.item.Name}を装着した。", null, .01f));
+
+                    this.gameSystem.SaveDataToLocal(this.Mode);
+                }
+                else
+                {
+                    StopCoroutine(mc);
+                    StartCoroutine(UIController.PlayMessage($"お金が不足しています。", null, .01f));
+                }
+
             }
             dis?.Invoke();
 
@@ -202,6 +221,7 @@ public class GameController : MonoBehaviour
     protected IEnumerator NextThread(float waitTime = 1)
     {
         yield return SceneController.PlayRoundClear(UIController, waitTime);
+        //yield return new WaitForSeconds(.5f);
         if (gameSystem.NextStage(this.Mode)) StartCoroutine(StartThread());
         else StartCoroutine(FinishThread());
     }

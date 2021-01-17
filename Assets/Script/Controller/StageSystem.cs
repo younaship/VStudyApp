@@ -5,7 +5,7 @@
 
     public StageSystem(GameSystem gameSystem)
     {
-        this.CurrentStage = new HegiStage(gameSystem);
+        this.CurrentStage = new SampleStage(gameSystem);
     }
 
     public void SetCurrentStage(Stage stage)
