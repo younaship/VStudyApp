@@ -82,12 +82,14 @@ namespace MyConnection
         public string Id; // DKey
         public string Name;
 
+        public string Config; // Player Attr
         public string Data; // Result Data
 
         public void SetValue(Player player)
         {
             this.Name = player.Name;
             this.Data = player.Data;
+            this.Config = player.Config;
         }
     }
 

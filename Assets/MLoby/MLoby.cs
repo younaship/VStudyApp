@@ -20,24 +20,31 @@ public class MLoby : MonoBehaviour
     List<PlayerIcon> playerIcons = new List<PlayerIcon>();
     FireEventHandler events, clientEvents;
 
+    GameConfig config;
+    //GameSystem gameSystem;
+
     bool isBusy;
     static string uid;
     static string uName = "YounashiP";
+    static string uConfig = "";
 
     public void Awake()
     {
         this.SceneLoader = this.GetComponent<SceneLoader>();
         this.connection = SceneLoader.GetArgs<FireConnection>() ?? new FireConnection();
+        this.config = new GameSystem().LoadDataFromLocal(new GameMode(GameMode.Mode.Single));
 
         uid = uid ?? System.Guid.NewGuid().ToString("N").Substring(0, 8);
         Debug.Log(uid);
+
+        uConfig = JsonUtility.ToJson(config);
 
         FireEventHandler ev = (o, e) =>
         {
             Debug.Log("MLoby Events..." + e.EventType);
             if( e.EventType == FireEventType.JoinUser || e.EventType == FireEventType.BreakUser)
             {
-                SyncPlayer(this.connection.Room.Players.Select((p)=>p.Name).ToArray());
+                SyncPlayer(this.connection.Room.Players.ToArray());
                 var player = e.Arg as MyConnection.Player;
                 if (player != null && e.EventType == FireEventType.JoinUser) AddMessage($"{ player.Name }が参加しました。");
                 if (player != null && e.EventType == FireEventType.BreakUser) AddMessage($"{ player.Name }が退室しました。");
@@ -53,13 +60,14 @@ public class MLoby : MonoBehaviour
         this.messageText.text = "";
         AddMessage("Welcome to Lobby.");
 
-        if (SceneLoader.GetArgs<MultiResult>() != null) Debug.Log("Result... " + SceneLoader.GetArgs<MultiResult>().Score);
         Init();
     }
     
     void Init()
     {
-        SyncPlayer(new string[] { uName }); // 自身をViewに追加
+        SyncPlayer(new MyConnection.Player[] {
+            new MyConnection.Player(){ Name = uName, Config = uConfig }
+        }); // 自身をViewに追加
 
         GetOnPressSelect(new string[] { "部屋をつくる", "部屋をさがす" }, (r) =>
         {
@@ -76,23 +84,23 @@ public class MLoby : MonoBehaviour
         this.connection.EventHandler -= clientEvents;
     }
 
-    void SyncPlayer(string[] ids) // PlayerIconを同期します。
+    void SyncPlayer(MyConnection.Player[] players) // PlayerIconを同期します。
     {
         playerIcons.ForEach((p) => p.Remove());
         playerIcons.Clear();
 
-        foreach(var id in ids)
+        foreach (var player in players)
         {
             var p = Instantiate(playerImagePre, targetPlayerImage.transform).GetComponent<PlayerIcon>();
             playerIcons.Add(p);
-            p.Set(id);
+            p.Set(player);
         }
     }
 
     async void PushMakeRoom()
     {
         isBusy = true;
-        var result = (!connection.IsConnected) ? await connection.CreateRoom(new MyConnection.Player() { Id= uid, Name=uName }) : null;
+        var result = (!connection.IsConnected) ? await connection.CreateRoom(new MyConnection.Player() { Id = uid, Name = uName, Config = uConfig }) : null;
         if (result != null) AddMessage($"ルーム「{result}」を作成しました。");
 
         GetOnPressSelect(new string[] { "部屋を閉じる", "このメンバーではじめる" }, async(r) =>
@@ -124,7 +132,7 @@ public class MLoby : MonoBehaviour
         {
             if (r is null || r == "") return;
             isBusy = true;
-            if (await connection.JoinRoom(r, new MyConnection.Player() { Id = uid, Name = "YounashiP" }))
+            if (await connection.JoinRoom(r, new MyConnection.Player() { Id = uid, Name = "YounashiP", Config = uConfig }))
             {
                 FireEventHandler ev = (o, e) =>
                 {

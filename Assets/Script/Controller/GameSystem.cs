@@ -27,10 +27,10 @@ public class GameSystem
         Player.Atk = 100;
         */
         Player.Normal = Resources.Load<Sprite>("player_default");
-        Player.Atack = Resources.Load<Sprite>("player_normal");
+        //Player.Atack = Resources.Load<Sprite>("player_normal");
     }
 
-    public void LoadDataFromLocal(GameMode mode)
+    public GameConfig LoadDataFromLocal(GameMode mode)
     {
         string json = PlayerPrefs.GetString("gameconfig", null);
         var data = String.IsNullOrEmpty(json) ? new GameConfig() : JsonUtility.FromJson<GameConfig>(json);
@@ -42,6 +42,8 @@ public class GameSystem
             GameConfig.NowRoundIndex = 0;
         }
         Debug.Log("Load From Local: " + json);
+
+        return this.GameConfig;
     }
 
     public void SaveDataToLocal(GameMode mode)

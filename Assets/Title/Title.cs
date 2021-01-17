@@ -14,7 +14,7 @@ public class Title : MonoBehaviour
 
     public void Start()
     {
-        PlayerPrefs.DeleteAll(); // Debug
+        
     }
 
     public void OnPushSingle()
@@ -29,5 +29,10 @@ public class Title : MonoBehaviour
         SceneLoader.Args.Clear();
         SceneLoader.Args.Add(new GameMode(GameMode.Mode.Multi));
         SceneLoader.LoadSceneAsync("MLobby");
+    }
+
+    public void ClearData()
+    {
+        PlayerPrefs.DeleteAll(); // Debug
     }
 }

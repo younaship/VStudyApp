@@ -11,6 +11,6 @@ public class BgCloud_Attr : MonoBehaviour
         var pos = rect.anchoredPosition;
 
         if (pos.x <= -550) rect.anchoredPosition = new Vector3(1650, pos.y);
-        else rect.anchoredPosition += Vector2.left * .1f;
+        else rect.anchoredPosition += Vector2.left * .2f;
     }
 }
