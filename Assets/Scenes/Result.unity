@@ -369,7 +369,6 @@ GameObject:
   m_Component:
   - component: {fileID: 299681540}
   - component: {fileID: 299681539}
-  - component: {fileID: 299681538}
   m_Layer: 0
   m_Name: CParticleCam
   m_TagString: MainCamera
@@ -377,14 +376,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &299681538
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299681537}
-  m_Enabled: 1
 --- !u!20 &299681539
 Camera:
   m_ObjectHideFlags: 0

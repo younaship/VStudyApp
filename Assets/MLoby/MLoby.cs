@@ -25,7 +25,7 @@ public class MLoby : MonoBehaviour
 
     bool isBusy;
     static string uid;
-    static string uName = "YounashiP";
+    static string uName = "User";
     static string uConfig = "";
 
     public void Awake()
@@ -52,6 +52,8 @@ public class MLoby : MonoBehaviour
         };
         this.connection.EventHandler += ev;
         this.events = ev;
+
+        uName = PlayerPrefs.GetString("uName", "User");
     }
 
     // Start is called before the first frame update
@@ -171,8 +173,15 @@ public class MLoby : MonoBehaviour
 
     public void OnPushDebug()
     {
-        SceneLoader.Args.Add(new GameMode(GameMode.Mode.Multi));
-        SceneLoader.LoadSceneAsync("Game");
+        inputBox.GetAnswer("名前を入力 (8文字まで)", (r) =>
+        {
+            if (r is null || r == "" || r.Length > 8) return;
+            uName = r;
+            PlayerPrefs.SetString("uName", r);
+            Init(); // ^^
+        });
+        //SceneLoader.Args.Add(new GameMode(GameMode.Mode.Multi));
+        //SceneLoader.LoadSceneAsync("Game");
     }
 
     void StartGame()

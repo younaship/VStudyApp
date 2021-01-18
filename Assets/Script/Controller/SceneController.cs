@@ -12,6 +12,7 @@ public class SceneController : MonoBehaviour
 
     Sprite player_def, player_atk, enemy_def, enemy_atk;
     [SerializeField] Animator player_anim, enemy_anim;
+    [SerializeField] GameObject valuePopupPre;
 
     void SetPlayer(Sprite sprite)
     {
@@ -124,9 +125,23 @@ public class SceneController : MonoBehaviour
     /// <summary>
     /// プレイヤーが攻撃するアニメーション効果を再生します。
     /// </summary>
-    public void PlayAtackPlayer()
+    public void PlayAtackPlayer(float damage)
     {
         player_anim.SetTrigger("playerAttack");
+        StartCoroutine(_PlayAtackPlayer(damage));
+    }
+
+    IEnumerator _PlayAtackPlayer(float damage)
+    {
+        yield return new WaitForSeconds(.3f);
+        var pop = Instantiate(valuePopupPre, this.enemy.transform).GetComponent<ValuePopup>();
+        pop.Set($"{damage}", Color.white);
+    }
+
+    public void PlayGetMoney(float price)
+    {
+        var pop = Instantiate(valuePopupPre, this.enemy.transform).GetComponent<ValuePopup>();
+        pop.Set($"{price}", Color.yellow);
     }
 
     /// <summary>
