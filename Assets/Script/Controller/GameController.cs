@@ -65,15 +65,19 @@ public class GameController : MonoBehaviour
 
     protected IEnumerator MultiThread()
     {
-        for(int i = 5; i > 0; i--)
+        var start = Time.time;
+        int MULTI_TIME = 30;
+
+        while(start + MULTI_TIME > Time.time)
         {
-            UIController.SetRound(i.ToString());
-            yield return new WaitForSeconds(1f);
+            int rem = (int)((start + MULTI_TIME) - Time.time) ;
+            UIController.SetRound(rem.ToString());
+            yield return null;
         }
 
         var result = new MultiResult()
         {
-            Score = gameSystem.GameConfig.NowRoundIndex * 10 + 1 // Test
+            Score = gameSystem.GameConfig.NowRoundIndex * 10 // Test
         };
 
         StopAllCoroutines();
@@ -118,7 +122,7 @@ public class GameController : MonoBehaviour
         {
             var damage = gameSystem.Player.Atk;
             var result = gameSystem.GetBattleRound().Enemy.AttackToMe(damage);
-            SceneController.PlayAtackPlayer();
+            SceneController.PlayAtackPlayer(damage);
 
             if (result == AttackAction.Kill) // 倒した
             {
@@ -127,6 +131,7 @@ public class GameController : MonoBehaviour
                     if(round.DropItem is Money)
                     {
                         gameSystem.GameConfig.Money += round.DropItem.Price;
+                        UIController.SetUI(gameSystem, Mode); // Refresh
                     }
                 }
                 UIController.SetHPEnemy(0, 1);
@@ -156,7 +161,7 @@ public class GameController : MonoBehaviour
 
         IEnumerator Success()
         {
-            SceneController.PlayAtackPlayer();
+            //SceneController.PlayAtackPlayer();
             UIController.PlaySuccess(question);
             yield return SceneController.PlayEnemyDie();
 

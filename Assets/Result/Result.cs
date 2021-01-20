@@ -14,6 +14,7 @@ public class Result: MonoBehaviour
 
     [SerializeField] GameObject waitPanel, targetPlayerImage, playerImagePre;
     [SerializeField] Text header, center;
+    [SerializeField] ParticleSystem cParticle;
 
 
     //FireConnection connection;
@@ -76,7 +77,7 @@ public class Result: MonoBehaviour
             int sA = -1, sB = -1;
             int.TryParse(a.RawResult, out sA);
             int.TryParse(b.RawResult, out sB);
-            return sA - sB;
+            return sB - sA;
         });
 
         var tops = new List<ResultValue>();
@@ -93,6 +94,8 @@ public class Result: MonoBehaviour
             var icon = Instantiate(playerImagePre, targetPlayerImage.transform).GetComponent<PlayerIcon>();
             icon.Set(top.Player);
         }
+        cParticle.Play();
+
     }
 
     void OnDestroy()

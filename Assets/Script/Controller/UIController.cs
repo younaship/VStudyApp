@@ -61,7 +61,7 @@ public class UIController : MonoBehaviour
                 break;
 
             case StageType.shop:
-                foreach (var ui in uis) ui.ChangeTo(UIType.Type.InShop);//ui.ChangeTo(UIType.Type.InShop);
+                foreach (var ui in uis) ui.ChangeTo(UIType.Type.InShop);//ui.ChangeTo(UIType.Type.InShop); 
                 break;
         }
     }
@@ -162,7 +162,7 @@ public class UIController : MonoBehaviour
         questionText.text = "";
         for (var i = 0; i < question.As.Length; i++) answerText.text += $"{Words[i]} : {question.As[i]}\n";
         //question.As.Select((a, i) => answerText.text += $"{Words[i]} : {a}");
-        const float TIME = 0.1f;
+        const float TIME = 0.05f;
         foreach (char c in question.Q)
         {
             questionText.text += c;
