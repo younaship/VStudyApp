@@ -172,8 +172,11 @@ public class GameController : MonoBehaviour
     protected IEnumerator ShopThread()
     {
         var sr = gameSystem.GetRound() as ShopRound;
+
+        Debug.Log(sr.Item is Weapon ? "武器" : "防具");
         var ms = $"「{sr.Item.Name}」が ${sr.Item.Price} で購入できる。\n";
         if (sr.Item is Weapon) ms += "タイプ：武器\n" + "威力：" + (sr.Item as Weapon).Power + "\n\n";
+        else ms += "タイプ：防具\n" + "防御力：" + (sr.Item as Armor).Defence + "\n\n";
 
         ms += "[現在の装備]\n武器： ";
         ms += gameSystem.Player.Weapon is null ? "装備無し\n" : $"{gameSystem.Player.Weapon.Name}[{gameSystem.Player.Weapon.Power}]\n";

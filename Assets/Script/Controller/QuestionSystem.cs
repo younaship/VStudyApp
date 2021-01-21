@@ -16,22 +16,27 @@ public class QuestionSystem
 
         if (n == outed[difficulty].Count) return Question.Null;
         
-        do { rndNum = new System.Random().Next(n); } while (outed[difficulty].Contains(rndNum));
+        do { 
+            rndNum = new System.Random().Next(n);
+        } while (outed[difficulty].Contains(rndNum));
+        
         outed[difficulty].Add(n);
+        
         return questions[difficulty][rndNum];
     }
 
     public void ReadFromCSV()
     {
-        string[] values = null;
+        string[] values = new string[7];
         var csvFile = Resources.Load("question") as TextAsset;
+        int i = 0;
         using (var sr = new StringReader(csvFile.text))
         {
             while (sr.Peek() > -1)
             {
+                i++;
                 var line = sr.ReadLine();
                 values = line.Split(',');
-
                 if (questions.ContainsKey(int.Parse(values[6])))
                 {
                     questions[int.Parse(values[6])].Add(new Question(values[0], new string[] { values[1], values[2], values[3], values[4] }, int.Parse(values[5]), int.Parse(values[6])));

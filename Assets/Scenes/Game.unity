@@ -692,13 +692,13 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 52
     m_FontStyle: 1
-    m_BestFit: 0
-    m_MinSize: 5
+    m_BestFit: 1
+    m_MinSize: 20
     m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
@@ -1853,7 +1853,8 @@ MonoBehaviour:
   bgImage: {fileID: 1342240836}
   player_anim: {fileID: 680591408}
   enemy_anim: {fileID: 57828537}
-  valuePopupPre: {fileID: 0}
+  valuePopupPre: {fileID: 1731057937863723553, guid: 32a9bb86626b002478c1b69f7770fad0,
+    type: 3}
 --- !u!114 &557672643
 MonoBehaviour:
   m_ObjectHideFlags: 0

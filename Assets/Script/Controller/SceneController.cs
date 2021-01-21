@@ -65,6 +65,8 @@ public class SceneController : MonoBehaviour
 
         SetPlayer(this.player_def);
         SetEnemy(sr.GetShopImage());
+        Debug.Log(sr.Item is Weapon);
+        Debug.Log(sr.Item is Armor);
     }
 
     /// <summary>

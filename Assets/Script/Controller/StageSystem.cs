@@ -5,7 +5,7 @@
 
     public StageSystem(GameSystem gameSystem)
     {
-        this.CurrentStage = new SampleStage(gameSystem);
+        this.CurrentStage = new TestPlayStage(gameSystem);
     }
 
     public void SetCurrentStage(Stage stage)
