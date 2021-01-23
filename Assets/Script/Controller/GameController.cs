@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
         {
             case StageType.battle:
                 SceneController.SetBattleStage(gameSystem);
-                StartCoroutine(BattleThread());
+                StartCoroutine(BattleThread(gameSystem.GetRound() as ButtleRound));
                 break;
 
             case StageType.shop:
@@ -85,11 +85,10 @@ public class GameController : MonoBehaviour
         
     }
 
-    protected IEnumerator BattleThread()
+    protected IEnumerator BattleThread(ButtleRound round)
     {
         var question = gameSystem.GetQuestion();
         var events = new List<Action>();
-        var round = gameSystem.GetRound() as ButtleRound;
 
         events.Add(UIController.AddSetHpListener(() => gameSystem.Player.Hp));
         events.Add(UIController.AddSetHpListener(() => round.Enemy.Hp, false));
@@ -121,7 +120,8 @@ public class GameController : MonoBehaviour
         void AtackDamage()
         {
             var damage = gameSystem.Player.Atk;
-            var result = gameSystem.GetBattleRound().Enemy.AttackToMe(damage);
+            var result = round.Enemy.AttackToMe(damage);
+
             SceneController.PlayAtackPlayer(damage);
 
             if (result == AttackAction.Kill) // 倒した
@@ -135,7 +135,13 @@ public class GameController : MonoBehaviour
                     }
                 }
                 UIController.SetHPEnemy(0, 1);
+                StartCoroutine(KillEnemy());
                 StartCoroutine(NextThread());
+            }
+            else
+            {
+                foreach (var e in events) e.Invoke();
+                StartCoroutine(BattleThread(round));
             }
         }
 
@@ -161,11 +167,14 @@ public class GameController : MonoBehaviour
 
         IEnumerator Success()
         {
-            //SceneController.PlayAtackPlayer();
             UIController.PlaySuccess(question);
-            yield return SceneController.PlayEnemyDie();
 
             yield break;
+        }
+
+        IEnumerator KillEnemy()
+        {
+            yield return SceneController.PlayEnemyDie();
         }
     }
 
