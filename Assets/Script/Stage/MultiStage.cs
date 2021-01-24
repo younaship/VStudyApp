@@ -17,19 +17,17 @@ public class MultiStage : Stage
         else if (index < 15) bgimage = Resources.Load<Sprite>("bg_normal_n");
         else bgimage = Resources.Load<Sprite>("bg_normal");
 
-        var plus = 10 * index;
-
         return new ButtleRound()
         {
             MinQuestionDifficulty = 1,
-            MaxQuestionDifficulty = 1,
+            MaxQuestionDifficulty = 3,
             Enemy = new Enemy()
             {
-                Atk = 3 + plus / 2,
-                AttackRate = 2.0f,
-                MaxHp = 20 + plus ,
-                Hp = 20 + plus,
-                Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 20))
+                Atk = 3,
+                AttackRate = 1.0f,
+                MaxHp = 399 ,
+                Hp = 399,
+                Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 21))
             },
             BackImage = bgimage
         };

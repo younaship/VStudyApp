@@ -5,7 +5,7 @@ using UnityEngine;
 public class TestPlayStage : Stage
 {
     public TestPlayStage(GameSystem gameSystem) : base(gameSystem)
-    { 
+    {
     }
 
     public override Round GetRound(int index)
@@ -17,81 +17,108 @@ public class TestPlayStage : Stage
         else bgimage = Resources.Load<Sprite>("bg_normal");
 
 
-        if (index > 0 && index % 2 == 0)
+        if (index > 0 && index % 5 == 0)
         {
-            float plus = index * 0.1f;
+            int price;
+            float power;
+            float difence;
+            if (index <= 20)
+            {
+                price = 75;
+                power = Random.Range(50, 101);
+                difence = Random.Range(5, 7);
 
-            string name = "Made in Stage" + index;
-            int price = index * 10 + Random.Range(-index, index);
+            }
+            else if (index <= 40)
+            {
+                price = 285;
+                power = Random.Range(150, 301);
+                difence = Random.Range(7, 11);
+            }
+            else if (index <= 60)
+            {
+                price = 1065;
+                power = Random.Range(400, 801);
+                difence = Random.Range(15, 31);
+            }
+            else
+            {
+                price = 3940;
+                power = Random.Range(1000, 5001);
+                difence = Random.Range(50, 101);
+            }
 
-
- 
-
+            string name = "強さ" + index / 5 + "の";
             if (Random.value < 0.5)
             {
-                float power = 5 + plus / 5;
-                string spritePath = "weapon/W_" + 1;
-
+                name += "武器";
                 return new ShopRound()
                 {
-                    Item = new Weapon(name, price, price, power, spritePath),
+                    Item = new Weapon(
+                        name,
+                        price,
+                        price,
+                        power,
+                        "weapon/W_" + Random.Range(1, 21)
+                        ),
                     BackImage = bgimage
                 };
             }
             else
             {
-                float difence = 10 + plus / 10;
-                string spritePath = "armor/A_" + 1;
-
+                name += "防具";
                 return new ShopRound()
                 {
-                    Item = new Armor(name, price, price, difence, spritePath),
+                    Item = new Armor(
+                        name,
+                        price,
+                        price,
+                        difence,
+                        "armor/A_" + Random.Range(1, 21)
+                        ),
                     BackImage = bgimage
                 };
             }
-
         }
 
 
-        if (index < 20)
+        if (index <= 20)
         {
-            float plus = index * 0.1f;
             return new ButtleRound()
             {
                 MinQuestionDifficulty = 1,
                 MaxQuestionDifficulty = 1,
                 Enemy = new Enemy()
                 {
-                    Atk = 3 + plus / 3,
-                    AttackRate = 2.0f + plus / 2.0f,
-                    MaxHp = 20 + plus / 20,
-                    Hp = 20 + plus / 20,
-                    Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 20))
+                    Atk = 10,
+                    AttackRate = 5,
+                    MaxHp = 150,
+                    Hp = 150,
+                    Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 21))
                 },
                 BackImage = bgimage,
-                DropItem = new Money(1000/*Random.value < 0.7 ? 1 : 0*/)
+                DropItem = new Money(Random.Range(5, 11))
             };
         }
-        else if (index < 40)
+        else if (index <= 40)
         {
-            float plus = index * 0.2f;
             return new ButtleRound()
             {
                 MinQuestionDifficulty = 1,
                 MaxQuestionDifficulty = 2,
                 Enemy = new Enemy()
                 {
-                    Atk = 3 + plus / 3,
-                    AttackRate = 2.0f + plus / 2.0f,
-                    MaxHp = 20 + plus / 20,
-                    Hp = 20 + plus / 20,
-                    Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 20))
+                    Atk = 20,
+                    AttackRate = 5,
+                    MaxHp = 300,
+                    Hp = 300,
+                    Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 21))
                 },
                 BackImage = bgimage,
-                DropItem = new Money(Random.value < 0.7 ? 2 : 1)
+                DropItem = new Money(Random.Range(20, 36))
             };
         }
-        else if (index < 60)
+        else if (index <= 60)
         {
             float plus = index * 0.3f;
             return new ButtleRound()
@@ -100,33 +127,32 @@ public class TestPlayStage : Stage
                 MaxQuestionDifficulty = 3,
                 Enemy = new Enemy()
                 {
-                    Atk = 3 + plus / 3,
-                    AttackRate = 2.0f + plus / 2.0f,
-                    MaxHp = 20 + plus / 20,
-                    Hp = 20 + plus / 20,
-                    Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 20))
+                    Atk = 40,
+                    AttackRate = 5,
+                    MaxHp = 1000,
+                    Hp = 1000,
+                    Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 21))
                 },
                 BackImage = bgimage,
-                DropItem = new Money(Random.value < 0.7 ? 3 : 2)
+                DropItem = new Money(Random.Range(50, 101))
             };
         }
         else
         {
-            float plus = index * 0.4f;
             return new ButtleRound()
             {
                 MinQuestionDifficulty = 2,
                 MaxQuestionDifficulty = 3,
                 Enemy = new Enemy()
                 {
-                    Atk = 3 + plus / 3,
-                    AttackRate = 2.0f + plus / 2.0f,
-                    MaxHp = 20 + plus / 20,
-                    Hp = 20 + plus / 20,
-                    Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 20))
+                    Atk = 100,
+                    AttackRate = 5,
+                    MaxHp = 5000,
+                    Hp = 5000,
+                    Normal = Resources.Load<Sprite>("enemy/E_" + Random.Range(1, 21))
                 },
                 BackImage = bgimage,
-                DropItem = new Money(Random.value < 0.7 ? 4 : 3)
+                DropItem = new Money(Random.Range(200, 501))
             };
         }
 

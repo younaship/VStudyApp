@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour
     {
 
     }
-    
+
     protected IEnumerator StartThread()
     {
         var stage = gameSystem.GetRound();
@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
         {
             case StageType.battle:
                 SceneController.SetBattleStage(gameSystem);
-                StartCoroutine(BattleThread());
+                StartCoroutine(BattleThread(gameSystem.GetRound() as ButtleRound));
                 break;
 
             case StageType.shop:
@@ -68,9 +68,9 @@ public class GameController : MonoBehaviour
         var start = Time.time;
         int MULTI_TIME = 30;
 
-        while(start + MULTI_TIME > Time.time)
+        while (start + MULTI_TIME > Time.time)
         {
-            int rem = (int)((start + MULTI_TIME) - Time.time) ;
+            int rem = (int)((start + MULTI_TIME) - Time.time);
             UIController.SetRound(rem.ToString());
             yield return null;
         }
@@ -82,14 +82,13 @@ public class GameController : MonoBehaviour
 
         StopAllCoroutines();
         this.transform.GetComponent<Game>().GoMultiResult(result);
-        
+
     }
 
-    protected IEnumerator BattleThread()
+    protected IEnumerator BattleThread(ButtleRound round)
     {
         var question = gameSystem.GetQuestion();
         var events = new List<Action>();
-        var round = gameSystem.GetRound() as ButtleRound;
 
         events.Add(UIController.AddSetHpListener(() => gameSystem.Player.Hp));
         events.Add(UIController.AddSetHpListener(() => round.Enemy.Hp, false));
@@ -110,7 +109,7 @@ public class GameController : MonoBehaviour
             var damage = round.Enemy.Atk;
             var result = gameSystem.Player.AttackToMe(damage);
             SceneController.PlayAtackEnemy();
-            
+
             if (result == AttackAction.Kill)
             {
                 StartCoroutine(DeathThread());
@@ -121,21 +120,29 @@ public class GameController : MonoBehaviour
         void AtackDamage()
         {
             var damage = gameSystem.Player.Atk;
-            var result = gameSystem.GetBattleRound().Enemy.AttackToMe(damage);
+            var result = round.Enemy.AttackToMe(damage);
+
             SceneController.PlayAtackPlayer(damage);
 
             if (result == AttackAction.Kill) // 倒した
             {
                 foreach (var e in events) e.Invoke();
-                if (round.DropItem != null) { // ドロップアイテムあり
-                    if(round.DropItem is Money)
+                if (round.DropItem != null)
+                { // ドロップアイテムあり
+                    if (round.DropItem is Money)
                     {
                         gameSystem.GameConfig.Money += round.DropItem.Price;
                         UIController.SetUI(gameSystem, Mode); // Refresh
                     }
                 }
                 UIController.SetHPEnemy(0, 1);
+                StartCoroutine(KillEnemy());
                 StartCoroutine(NextThread());
+            }
+            else
+            {
+                foreach (var e in events) e.Invoke();
+                StartCoroutine(BattleThread(round));
             }
         }
 
@@ -161,22 +168,22 @@ public class GameController : MonoBehaviour
 
         IEnumerator Success()
         {
-            //SceneController.PlayAtackPlayer();
             UIController.PlaySuccess(question);
-            yield return SceneController.PlayEnemyDie();
 
             yield break;
+        }
+
+        IEnumerator KillEnemy()
+        {
+            yield return SceneController.PlayEnemyDie();
         }
     }
 
     protected IEnumerator ShopThread()
     {
         var sr = gameSystem.GetRound() as ShopRound;
-
-        Debug.Log(sr.Item is Weapon ? "武器" : "防具");
         var ms = $"「{sr.Item.Name}」が ${sr.Item.Price} で購入できる。\n";
         if (sr.Item is Weapon) ms += "タイプ：武器\n" + "威力：" + (sr.Item as Weapon).Power + "\n\n";
-        else ms += "タイプ：防具\n" + "防御力：" + (sr.Item as Armor).Defence + "\n\n";
 
         ms += "[現在の装備]\n武器： ";
         ms += gameSystem.Player.Weapon is null ? "装備無し\n" : $"{gameSystem.Player.Weapon.Name}[{gameSystem.Player.Weapon.Power}]\n";
@@ -191,8 +198,9 @@ public class GameController : MonoBehaviour
         dis = UIController.GetOnPressSelect((r) =>
         {
             var p = gameSystem.Player;
-            if (r) { // 購入アクション
-                if(gameSystem.GameConfig.Money >= sr.Item.Price)
+            if (r)
+            { // 購入アクション
+                if (gameSystem.GameConfig.Money >= sr.Item.Price)
                 {
                     gameSystem.GameConfig.Money -= sr.Item.Price;
                     gameSystem.SetItemToPlayer(sr.Item);

@@ -34,8 +34,8 @@ public class Player : People
         {
             return new Player()
             {
-                Hp = 35,
-                MaxHp = 35,
+                Hp = 100,
+                MaxHp = 1000,
                 Atk = 100,
             };
         }
