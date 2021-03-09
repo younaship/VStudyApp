@@ -24,7 +24,7 @@ public class QuestionSystem
     public void ReadFromCSV()
     {
         string[] values = null;
-        var csvFile = Resources.Load("question") as TextAsset;
+        var csvFile = Resources.Load("Demo_Question") as TextAsset;
         using (var sr = new StringReader(csvFile.text))
         {
             while (sr.Peek() > -1)
@@ -43,6 +43,5 @@ public class QuestionSystem
                 }
             }
         }
-        Debug.Log(questions[2][1].Q);
     }
 }
