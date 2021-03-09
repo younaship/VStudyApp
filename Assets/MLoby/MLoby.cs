@@ -68,7 +68,7 @@ public class MLoby : MonoBehaviour
     void Init()
     {
         SyncPlayer(new MyConnection.Player[] {
-            new MyConnection.Player(){ Name = uName, Config = uConfig }
+            new MyConnection.Player(){ Name = MLoby.uName, Config = uConfig }
         }); // 自身をViewに追加
 
         GetOnPressSelect(new string[] { "部屋をつくる", "部屋をさがす" }, (r) =>
@@ -134,7 +134,7 @@ public class MLoby : MonoBehaviour
         {
             if (r is null || r == "") return;
             isBusy = true;
-            if (await connection.JoinRoom(r, new MyConnection.Player() { Id = uid, Name = "YounashiP", Config = uConfig }))
+            if (await connection.JoinRoom(r, new MyConnection.Player() { Id = uid, Name = MLoby.uName, Config = uConfig }))
             {
                 FireEventHandler ev = (o, e) =>
                 {
@@ -176,7 +176,7 @@ public class MLoby : MonoBehaviour
         inputBox.GetAnswer("名前を入力 (8文字まで)", (r) =>
         {
             if (r is null || r == "" || r.Length > 8) return;
-            uName = r;
+            MLoby.uName = r;
             PlayerPrefs.SetString("uName", r);
             Init(); // ^^
         });
