@@ -28,7 +28,7 @@ public class QuestionSystem
     public void ReadFromCSV()
     {
         string[] values = new string[7];
-        var csvFile = Resources.Load("question") as TextAsset;
+        var csvFile = Resources.Load("Demo_Question") as TextAsset;
         int i = 0;
         using (var sr = new StringReader(csvFile.text))
         {
@@ -48,6 +48,5 @@ public class QuestionSystem
                 }
             }
         }
-        Debug.Log(questions[2][1].Q);
     }
 }

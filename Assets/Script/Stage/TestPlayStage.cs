@@ -87,7 +87,7 @@ public class TestPlayStage : Stage
             return new ButtleRound()
             {
                 MinQuestionDifficulty = 1,
-                MaxQuestionDifficulty = 1,
+                MaxQuestionDifficulty = 2,
                 Enemy = new Enemy()
                 {
                     Atk = 10,
@@ -124,7 +124,7 @@ public class TestPlayStage : Stage
             return new ButtleRound()
             {
                 MinQuestionDifficulty = 1,
-                MaxQuestionDifficulty = 3,
+                MaxQuestionDifficulty = 2,
                 Enemy = new Enemy()
                 {
                     Atk = 40,
@@ -141,8 +141,8 @@ public class TestPlayStage : Stage
         {
             return new ButtleRound()
             {
-                MinQuestionDifficulty = 2,
-                MaxQuestionDifficulty = 3,
+                MinQuestionDifficulty = 1,
+                MaxQuestionDifficulty = 2,
                 Enemy = new Enemy()
                 {
                     Atk = 100,
