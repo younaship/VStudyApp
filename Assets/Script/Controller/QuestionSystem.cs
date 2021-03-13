@@ -14,7 +14,7 @@ public class QuestionSystem
         if (!outed.ContainsKey(difficulty)) outed.Add(difficulty, new List<int>());
 
 
-        if (n == outed[difficulty].Count) return Question.Null;
+        if (n == outed[difficulty].Count) outed[difficulty].Clear(); // return Question.Null;
         
         do { 
             rndNum = new System.Random().Next(n);

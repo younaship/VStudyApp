@@ -20,7 +20,7 @@ public class MultiStage : Stage
         return new ButtleRound()
         {
             MinQuestionDifficulty = 1,
-            MaxQuestionDifficulty = 3,
+            MaxQuestionDifficulty = 2,
             Enemy = new Enemy()
             {
                 Atk = 3,
