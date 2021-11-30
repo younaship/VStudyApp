@@ -132,7 +132,8 @@ namespace MyConnection
                 DatabaseUrl = new Uri("https://v-studyapp.firebaseio.com/")
             };
             //var conf = Firebase.AppOptions.LoadFromJsonConfig(@"C:\Users\user\Desktop\StreamingAssets\google-services.json");
-            var app = Firebase.FirebaseApp.Create(conf); 
+            var app = Firebase.FirebaseApp.Create(conf);
+
             this.reference = FirebaseDatabase.DefaultInstance.RootReference;
 //            var path = Application.dataPath + "/StreamingAssets";
 //            var app = FirebaseDatabase.DefaultInstance.
@@ -140,6 +141,13 @@ namespace MyConnection
 //            this.reference.Database.GoOnline();
 
             EventHandler += (o, e) => { Debug.Log("FireEvent: " + e.EventType); };
+        }
+
+        public async void A()
+        {
+            var data = await reference.Child("fulllab").GetValueAsync();
+            var json = data.GetRawJsonValue();
+            Debug.Log(json);
         }
 
         public async Task<bool> JoinRoom(string roomId, Player player)

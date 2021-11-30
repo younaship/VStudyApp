@@ -14,7 +14,7 @@ public class Title : MonoBehaviour
 
     public void Start()
     {
-        
+        YAnalitycs.Send("startup", "null");
     }
 
     public void OnPushSingle()
