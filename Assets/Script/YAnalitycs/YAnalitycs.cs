@@ -57,20 +57,29 @@ public class YAnalitycs : MonoBehaviour
 
     public static void Send(string action, string args = null)
     {
-        var uuid = PlayerPrefs.GetString("uuid", "");
-        if(uuid == "")
-        {
-            uuid = GetUUID();
-            PlayerPrefs.SetString("uuid", uuid);
-        }
+        // var uuid = PlayerPrefs.GetString("uuid", "");
+        // if(uuid == "")
+        // {
+        //    uuid = GetUUID();
+        //    PlayerPrefs.SetString("uuid", uuid);
+        // }
 
+        var uuid = GetUUID();
         Debug.Log(uuid);
         Send(uuid, action, args);
     }
 
-    static string GetUUID()
+    public static string GetUUID()
     {
-        var uuid = Guid.NewGuid();
-        return uuid.ToString();
+        var uuid = PlayerPrefs.GetString("uuid", null);
+        if(uuid is null)
+        {
+            uuid = Guid.NewGuid().ToString();
+            PlayerPrefs.SetString("uuid", uuid);
+            return uuid;
+        }
+        // var uuid = Guid.NewGuid();
+        // return uuid.ToString();
+        return uuid;
     }
 }

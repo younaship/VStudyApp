@@ -63,8 +63,10 @@ public class MLoby : MonoBehaviour
         AddMessage("Welcome to Lobby.");
 
         Init();
+
+        YAnalitycs.Send("startup", "multiloby");
     }
-    
+
     void Init()
     {
         SyncPlayer(new MyConnection.Player[] {
@@ -84,6 +86,8 @@ public class MLoby : MonoBehaviour
         Debug.Log("Remove MLoby Listenners...");
         this.connection.EventHandler -= events;
         this.connection.EventHandler -= clientEvents;
+
+        YAnalitycs.Send("shutdown", "multiloby");
     }
 
     void SyncPlayer(MyConnection.Player[] players) // PlayerIconを同期します。
